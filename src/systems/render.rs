@@ -1,5 +1,4 @@
 use crate::World;
-use crate::components::traits::Renderable;
 use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
 

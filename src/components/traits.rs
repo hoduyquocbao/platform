@@ -8,6 +8,7 @@ pub trait Layoutable {
 /// Trait cho phép một đối tượng có thể được render (hiển thị trên UI).
 pub trait Renderable {
     type Object;
+    #[allow(dead_code)]
     fn object(&self) -> &Self::Object;
 }
 

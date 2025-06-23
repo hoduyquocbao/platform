@@ -108,4 +108,9 @@ T106,"(Cycle 4) Lựa chọn và tích hợp thư viện đồ họa 2D tối gi
 T107,"(Cycle 4) Cập nhật vòng lặp chính để quản lý cửa sổ đồ họa",Coder,Open,Critical
 T108,"(Cycle 4) Nâng cấp System `Interact` để nhận sự kiện từ cửa sổ",Coder,Open,High
 T109,"(Cycle 4) Tái cấu trúc System `Render` để vẽ hình khối cơ bản",Coder,Open,High
-T110,"(Cycle 4) Viết báo cáo triển khai V22 và cập nhật PKB",Coder,Open,High 
+T110,"(Cycle 4) Viết báo cáo triển khai V22 và cập nhật PKB",Coder,Open,High
+T111,"(Cycle 4) Sửa lỗi lifetime E0107 trong struct App",Coder,Open,Critical
+T112,"(Cycle 4) Sửa lỗi range pattern E0029 trong logic input",Coder,Open,Critical
+T113,"(Cycle 4) Dọn dẹp tất cả các cảnh báo (warnings)",Coder,Open,High
+T114,"(Cycle 4) Xác minh build thành công và không còn cảnh báo",Coder,Open,Critical
+T115,"(Cycle 4) Viết báo cáo triển khai V23 và cập nhật PKB",Coder,Open,High 

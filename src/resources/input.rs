@@ -9,6 +9,7 @@ pub struct Mouse {
 #[derive(Default)]
 pub struct Keyboard {
     pub key: Option<char>, // phím ký tự vừa được nhấn
+    pub chars: String, // chuỗi ký tự nhập vào frame này
     pub enter: bool,
     pub escape: bool,
     pub backspace: bool,

@@ -175,13 +175,13 @@ impl Scheduler {
 
 /// Ứng dụng chính, chứa World, Scheduler và Resources.
 #[derive(Default)]
-pub struct App<'a> {
+pub struct App {
     world: World,
     scheduler: Scheduler,
-    resources: Resources<'a>,
+    resources: Resources,
 }
 
-impl<'a> App<'a> {
+impl App {
     pub fn new() -> Self {
         let mut app = Self {
             world: World::new(),
@@ -293,12 +293,10 @@ fn main() {
             app.resources.mouse.position = (mx, my);
         }
         app.resources.mouse.pressed = window.get_mouse_down(minifb::MouseButton::Left);
-        // Lấy input bàn phím (chỉ lấy ký tự, Enter, Escape, Backspace, E)
-        app.resources.keyboard.key = window.get_keys_pressed(minifb::KeyRepeat::No).iter().find_map(|k| match k {
-            Key::A..=Key::Z => Some(((*k as u8) as char).to_ascii_lowercase()),
-            Key::Space => Some(' '),
-            _ => None,
-        });
+        // Lấy input bàn phím (ký tự)
+        // TODO: minifb không hỗ trợ lấy text input trực tiếp, cần custom InputCallback nếu muốn nhận ký tự unicode
+        app.resources.keyboard.chars = String::new();
+        // Các phím đặc biệt
         app.resources.keyboard.enter = window.is_key_down(Key::Enter);
         app.resources.keyboard.escape = window.is_key_down(Key::Escape);
         app.resources.keyboard.backspace = window.is_key_down(Key::Backspace);
