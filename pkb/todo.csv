@@ -10,4 +10,9 @@ T008,"Thiết lập cấu trúc App và World trong main.rs",Coder,Done,High
 T009,"Tích hợp các System vào Scheduler theo đúng thứ tự",Coder,Done,High
 T010,"Viết logic khởi tạo (seeding) các Entity ban đầu",Coder,Done,Medium
 T011,"Nâng cấp logic cho các System đại diện",Coder,Done,Medium
-T012,"Viết báo cáo triển khai V2 và cập nhật PKB",Coder,Done,High 
+T012,"Viết báo cáo triển khai V2 và cập nhật PKB",Coder,Done,High
+T013,"Tái cấu trúc World và Entity theo mô hình ECS thực thụ",Coder,Done,High
+T014,"Nâng cấp Scheduler và các System để hỗ trợ truy vấn dữ liệu",Coder,Done,High
+T015,"Triển khai logic truy vấn cho System `Render`",Coder,Done,Medium
+T016,"Triển khai luồng tương tác hoàn chỉnh cho `Input` và `Toggle`",Coder,Done,High
+T017,"Viết báo cáo triển khai V3 và cập nhật PKB",Coder,Done,High 

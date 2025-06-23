@@ -12,29 +12,55 @@ mod systems {
 use components::core::*;
 use systems::*;
 
-// Entity struct
-#[derive(Default)]
-pub struct Entity {
-    pub text: Option<Text>,
-    pub status: Option<Status>,
-    pub priority: Option<Priority>,
-    pub selected: Option<Selected>,
-    pub editing: Option<Editing>,
-    pub visible: Option<Visible>,
-    pub hover: Option<Hover>,
-    pub active: Option<Active>,
-    pub click: Option<Click>,
-    pub dirty: Option<Dirty>,
-    pub disabled: Option<Disabled>,
-}
+type Entity = usize;
 
 pub struct World {
-    pub entities: Vec<Entity>,
+    pub texts: Vec<Option<Text>>,
+    pub statuses: Vec<Option<Status>>,
+    pub priorities: Vec<Option<Priority>>,
+    pub selecteds: Vec<Option<Selected>>,
+    pub editings: Vec<Option<Editing>>,
+    pub visibles: Vec<Option<Visible>>,
+    pub hovers: Vec<Option<Hover>>,
+    pub actives: Vec<Option<Active>>,
+    pub clicks: Vec<Option<Click>>,
+    pub dirties: Vec<Option<Dirty>>,
+    pub disableds: Vec<Option<Disabled>>,
+    pub entity_count: usize,
 }
 
 impl World {
     pub fn new() -> Self {
-        Self { entities: Vec::new() }
+        Self {
+            texts: vec![],
+            statuses: vec![],
+            priorities: vec![],
+            selecteds: vec![],
+            editings: vec![],
+            visibles: vec![],
+            hovers: vec![],
+            actives: vec![],
+            clicks: vec![],
+            dirties: vec![],
+            disableds: vec![],
+            entity_count: 0,
+        }
+    }
+    pub fn spawn(&mut self) -> Entity {
+        let id = self.entity_count;
+        self.entity_count += 1;
+        self.texts.push(None);
+        self.statuses.push(None);
+        self.priorities.push(None);
+        self.selecteds.push(None);
+        self.editings.push(None);
+        self.visibles.push(None);
+        self.hovers.push(None);
+        self.actives.push(None);
+        self.clicks.push(None);
+        self.dirties.push(None);
+        self.disableds.push(None);
+        id
     }
 }
 
@@ -73,36 +99,30 @@ impl App {
 
     fn initialize(&mut self) {
         // Đăng ký các system theo thứ tự: interaction, toggle, layout, render, persist
-        self.scheduler.add(|_| interaction::interact());
-        self.scheduler.add(|_| toggle::toggle());
-        self.scheduler.add(|_| layout::layout());
-        self.scheduler.add(|_| render::render());
-        self.scheduler.add(|_| persist::persist());
+        self.scheduler.add(interaction::input);
+        self.scheduler.add(toggle::toggle);
+        self.scheduler.add(layout::layout);
+        self.scheduler.add(render::render);
+        self.scheduler.add(persist::persist);
         // Khởi tạo entity mẫu
-        self.world.entities.push(Entity {
-            text: Some(Text { value: "Task 1".to_string() }),
-            status: Some(Status),
-            priority: Some(Priority),
-            selected: Some(Selected),
-            visible: Some(Visible),
-            ..Default::default()
-        });
-        self.world.entities.push(Entity {
-            text: Some(Text { value: "Task 2".to_string() }),
-            status: Some(Status),
-            priority: Some(Priority),
-            editing: Some(Editing),
-            visible: Some(Visible),
-            ..Default::default()
-        });
-        self.world.entities.push(Entity {
-            text: Some(Text { value: "Task 3".to_string() }),
-            status: Some(Status),
-            priority: Some(Priority),
-            dirty: Some(Dirty),
-            visible: Some(Visible),
-            ..Default::default()
-        });
+        let e0 = self.world.spawn();
+        self.world.texts[e0] = Some(Text { value: "Task 1".to_string() });
+        self.world.statuses[e0] = Some(Status);
+        self.world.priorities[e0] = Some(Priority);
+        self.world.selecteds[e0] = None;
+        self.world.visibles[e0] = Some(Visible);
+        let e1 = self.world.spawn();
+        self.world.texts[e1] = Some(Text { value: "Task 2".to_string() });
+        self.world.statuses[e1] = Some(Status);
+        self.world.priorities[e1] = Some(Priority);
+        self.world.editings[e1] = Some(Editing);
+        self.world.visibles[e1] = Some(Visible);
+        let e2 = self.world.spawn();
+        self.world.texts[e2] = Some(Text { value: "Task 3".to_string() });
+        self.world.statuses[e2] = Some(Status);
+        self.world.priorities[e2] = Some(Priority);
+        self.world.dirties[e2] = Some(Dirty);
+        self.world.visibles[e2] = Some(Visible);
     }
 
     pub fn run(&mut self) {
