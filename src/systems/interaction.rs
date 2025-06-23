@@ -56,11 +56,27 @@ impl Interact {
             }
             if let Some(bounds) = &world.bounds[id] {
                 let (mx, my) = mouse.position;
-                if mx >= bounds.x
-                    && mx <= bounds.x + bounds.width
-                    && my >= bounds.y
-                    && my <= bounds.y + bounds.height
-                {
+                let icon_width = 24.0; // vùng biểu tượng mở/đóng bên trái
+                let in_icon = mx >= bounds.x && mx <= bounds.x + icon_width && my >= bounds.y && my <= bounds.y + bounds.height;
+                let in_main = mx > bounds.x + icon_width && mx <= bounds.x + bounds.width && my >= bounds.y && my <= bounds.y + bounds.height;
+                if in_icon && world.childrens[id].is_some() {
+                    world.hovers[id] = Some(Hover);
+                    if mouse.pressed {
+                        // Không select, chỉ toggle collapsed
+                        // Toggle Collapsed
+                        if world.collapseds[id].is_some() {
+                            world.collapseds[id] = None;
+                        } else {
+                            world.collapseds[id] = Some(Collapsed);
+                        }
+                        world.dirties[id] = Some(Dirty);
+                    }
+                    unsafe {
+                        if LAST_PRESSED && !mouse.pressed {
+                            // Không cần click event riêng cho icon
+                        }
+                    }
+                } else if in_main {
                     world.hovers[id] = Some(Hover);
                     if mouse.pressed {
                         for i in 0..world.entity_count {

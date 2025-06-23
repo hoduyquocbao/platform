@@ -40,6 +40,8 @@ impl Renderable for Visible {
     fn object(&self) -> &Self::Object { self }
 }
 
+pub struct Collapsed;
+
 // Interaction State Components
 pub struct Hover;
 impl Interactable for Hover {

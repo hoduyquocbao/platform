@@ -17,6 +17,10 @@ impl Layout {
                 *y += spacing;
             }
         }
+        // Nếu entity bị Collapsed thì không layout Children
+        if world.collapseds[id].is_some() {
+            return;
+        }
         // Thu thập children trước để tránh borrow lỗi
         let children_ids = if let Some(children) = &world.childrens[id] {
             children.0.clone()

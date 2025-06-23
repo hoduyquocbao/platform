@@ -30,6 +30,14 @@ impl System for Render {
                 } else if world.hovers[id].is_some() {
                     prefix = ">";
                 }
+                let mut icon = "";
+                if world.childrens[id].is_some() {
+                    if world.collapseds[id].is_some() {
+                        icon = "[+]";
+                    } else {
+                        icon = "[-]";
+                    }
+                }
                 let mut display_text = text.to_string();
                 if world.editings[id].is_some() {
                     display_text.push('|');
@@ -37,8 +45,8 @@ impl System for Render {
                 let indent = (bounds.x / 8.0) as usize;
                 let indent_str = "  ".repeat(indent);
                 println!(
-                    "{}{} {} ({}, {}) {} {} {}",
-                    indent_str, prefix, status, bounds.x, bounds.y, display_text, style, id
+                    "{}{}{} {} ({}, {}) {} {} {}",
+                    indent_str, icon, prefix, status, bounds.x, bounds.y, display_text, style, id
                 );
             }
         }

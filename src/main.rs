@@ -45,6 +45,7 @@ pub struct World {
     pub parents: Vec<Option<Parent>>,
     pub childrens: Vec<Option<Children>>,
     pub to_delete: Vec<Option<()>>,
+    pub collapseds: Vec<Option<Collapsed>>,
     pub entity_count: usize,
 }
 
@@ -69,6 +70,7 @@ impl World {
             parents: vec![],
             childrens: vec![],
             to_delete: vec![],
+            collapseds: vec![],
             entity_count: 0,
         }
     }
@@ -93,6 +95,7 @@ impl World {
         self.parents.push(None);
         self.childrens.push(None);
         self.to_delete.push(None);
+        self.collapseds.push(None);
         id
     }
     pub fn mark_for_delete(&mut self, id: usize) {
@@ -133,6 +136,7 @@ impl World {
         sweep_vec!(self.parents);
         sweep_vec!(self.childrens);
         sweep_vec!(self.to_delete);
+        sweep_vec!(self.collapseds);
         self.entity_count = keep.len();
     }
 }

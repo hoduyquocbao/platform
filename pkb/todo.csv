@@ -78,4 +78,9 @@ T076,"(Refactor) Định nghĩa các `Able` Trait (Layoutable, Renderable, etc.)
 T077,"(Refactor) Triển khai các `Able` Trait cho các Component tương ứng",Coder,Done,Critical
 T078,"(Refactor) Nâng cấp các System để hoạt động với Trait Bound thay vì Component cụ thể",Coder,Done,Critical
 T079,"(Refactor) Xác minh ứng dụng hoạt động như cũ sau khi tái cấu trúc",Coder,Done,High
-T080,"(Refactor) Viết báo cáo triển khai V16 và cập nhật PKB",Coder,Done,High 
+T080,"(Refactor) Viết báo cáo triển khai V16 và cập nhật PKB",Coder,Done,High
+T081,"(Cycle 3) Định nghĩa Component trạng thái `Collapsed`",Coder,Done,High
+T082,"(Cycle 3) Nâng cấp System `Interact` để xử lý sự kiện Mở/Đóng",Coder,Done,High
+T083,"(Cycle 3) Nâng cấp System `Layout` để ẩn các con của node bị đóng",Coder,Done,Medium
+T084,"(Cycle 3) Nâng cấp System `Render` để hiển thị biểu tượng Mở/Đóng",Coder,Done,Medium
+T085,"(Cycle 3) Viết báo cáo triển khai V17 và cập nhật PKB",Coder,Done,High 
