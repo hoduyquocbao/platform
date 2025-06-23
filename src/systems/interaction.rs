@@ -30,6 +30,19 @@ impl System for Interact {
                 }
             }
         }
+        // Tạo task mới khi nhấn 'n'
+        if keyboard.key == Some('n') {
+            let e = world.spawn();
+            world.creates[e] = Some(Create);
+        }
+        // Xóa task đang chọn khi nhấn 'd'
+        if keyboard.key == Some('d') {
+            for id in 0..world.entity_count {
+                if world.selecteds[id].is_some() {
+                    world.deletes[id] = Some(Delete);
+                }
+            }
+        }
         // Hit detection và phát hiện click (chỉ khi không Editing)
         for id in 0..world.entity_count {
             if world.editings[id].is_some() {

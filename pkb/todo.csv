@@ -58,4 +58,9 @@ T056,"(Refactor) Chuyển đổi tất cả các system hiện tại thành các
 T057,"(Refactor) Triển khai System Trait cho tất cả các struct system",Coder,Open,Critical
 T058,"(Refactor) Nâng cấp Scheduler để thực thi các Box<dyn System>",Coder,Open,Critical
 T059,"(Refactor) Cập nhật main.rs và xác minh build thành công",Coder,Open,Critical
-T060,"(Refactor) Viết báo cáo triển khai V12 và cập nhật PKB",Coder,Open,High 
+T060,"(Refactor) Viết báo cáo triển khai V12 và cập nhật PKB",Coder,Open,High
+T061,"(Cycle 2) Triển khai cơ chế tạo Task mới dựa trên Command",Coder,Done,High
+T062,"(Cycle 2) Triển khai cơ chế xóa Task đang chọn dựa trên Command",Coder,Done,High
+T063,"(Cycle 2) Nâng cấp System `Interact` để xử lý đầu vào bàn phím",Coder,Done,Medium
+T064,"(Cycle 2) Đảm bảo System `Layout` được cập nhật sau khi tạo/xóa Task",Coder,Done,Medium
+T065,"(Cycle 2) Viết báo cáo triển khai V13 và cập nhật PKB",Coder,Done,High 
