@@ -6,13 +6,13 @@ mod resources {
     pub mod input;
 }
 mod systems {
-    pub mod interaction;
-    pub mod toggle;
-    pub mod layout;
-    pub mod render;
-    pub mod persist;
     pub mod command;
+    pub mod interaction;
+    pub mod layout;
+    pub mod persist;
+    pub mod render;
     pub mod text;
+    pub mod toggle;
 }
 mod engine;
 use engine::System;
@@ -23,6 +23,7 @@ use resources::input::mod_rs::Resources;
 
 type Entity = usize;
 
+/// ECS World lưu trữ tất cả các component cho mọi entity.
 #[derive(Default)]
 pub struct World {
     pub texts: Vec<Option<Text>>,
@@ -90,6 +91,7 @@ impl World {
     pub fn mark_for_delete(&mut self, id: usize) {
         self.to_delete[id] = Some(());
     }
+    /// Xóa tất cả entity đã được đánh dấu to_delete và thu gọn các vector component.
     pub fn sweep(&mut self) {
         let mut keep = vec![];
         for id in 0..self.entity_count {
@@ -126,6 +128,7 @@ impl World {
     }
 }
 
+/// Bộ điều phối hệ thống, quản lý và thực thi các system.
 #[derive(Default)]
 pub struct Scheduler {
     systems: Vec<Box<dyn System>>,
@@ -133,7 +136,9 @@ pub struct Scheduler {
 
 impl Scheduler {
     pub fn new() -> Self {
-        Self { systems: Vec::new() }
+        Self {
+            systems: Vec::new(),
+        }
     }
     pub fn add(&mut self, system: Box<dyn System>) {
         self.systems.push(system);
@@ -145,6 +150,7 @@ impl Scheduler {
     }
 }
 
+/// Ứng dụng chính, chứa World, Scheduler và Resources.
 #[derive(Default)]
 pub struct App {
     world: World,
@@ -164,38 +170,63 @@ impl App {
     }
 
     fn initialize(&mut self) {
-        use systems::{interaction::Interact, layout::Layout, command::Command, render::Render, persist::Persist, toggle::Toggle, text::TextSystem};
+        use systems::{
+            command::{CreateSystem, DeleteSystem}, interaction::Interact, layout::Layout, persist::Persist,
+            render::Render, text::TextSystem, toggle::Toggle,
+        };
         self.scheduler.add(Box::new(Interact));
         self.scheduler.add(Box::new(Layout));
-        self.scheduler.add(Box::new(Command));
+        self.scheduler.add(Box::new(CreateSystem));
+        self.scheduler.add(Box::new(DeleteSystem));
         self.scheduler.add(Box::new(Render));
         self.scheduler.add(Box::new(Persist));
         self.scheduler.add(Box::new(Toggle));
         self.scheduler.add(Box::new(TextSystem));
         // Khởi tạo entity mẫu với Bounds và Style
         let e0 = self.world.spawn();
-        self.world.texts[e0] = Some(Text { value: "Task 1".to_string() });
+        self.world.texts[e0] = Some(Text {
+            value: "Task 1".to_string(),
+        });
         self.world.statuses[e0] = Some(Status);
         self.world.priorities[e0] = Some(Priority);
         self.world.selecteds[e0] = None;
         self.world.visibles[e0] = Some(Visible);
-        self.world.bounds[e0] = Some(Bounds { x: 0.0, y: 0.0, width: 100.0, height: 30.0 });
+        self.world.bounds[e0] = Some(Bounds {
+            x: 0.0,
+            y: 0.0,
+            width: 100.0,
+            height: 30.0,
+        });
         self.world.styles[e0] = Some(Style { color: "blue" });
         let e1 = self.world.spawn();
-        self.world.texts[e1] = Some(Text { value: "Task 2".to_string() });
+        self.world.texts[e1] = Some(Text {
+            value: "Task 2".to_string(),
+        });
         self.world.statuses[e1] = Some(Status);
         self.world.priorities[e1] = Some(Priority);
         self.world.editings[e1] = Some(Editing);
         self.world.visibles[e1] = Some(Visible);
-        self.world.bounds[e1] = Some(Bounds { x: 0.0, y: 40.0, width: 100.0, height: 30.0 });
+        self.world.bounds[e1] = Some(Bounds {
+            x: 0.0,
+            y: 40.0,
+            width: 100.0,
+            height: 30.0,
+        });
         self.world.styles[e1] = Some(Style { color: "green" });
         let e2 = self.world.spawn();
-        self.world.texts[e2] = Some(Text { value: "Task 3".to_string() });
+        self.world.texts[e2] = Some(Text {
+            value: "Task 3".to_string(),
+        });
         self.world.statuses[e2] = Some(Status);
         self.world.priorities[e2] = Some(Priority);
         self.world.dirties[e2] = Some(Dirty);
         self.world.visibles[e2] = Some(Visible);
-        self.world.bounds[e2] = Some(Bounds { x: 0.0, y: 80.0, width: 100.0, height: 30.0 });
+        self.world.bounds[e2] = Some(Bounds {
+            x: 0.0,
+            y: 80.0,
+            width: 100.0,
+            height: 30.0,
+        });
         self.world.styles[e2] = Some(Style { color: "red" });
     }
 

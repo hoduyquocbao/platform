@@ -63,4 +63,9 @@ T061,"(Cycle 2) Triển khai cơ chế tạo Task mới dựa trên Command",Cod
 T062,"(Cycle 2) Triển khai cơ chế xóa Task đang chọn dựa trên Command",Coder,Done,High
 T063,"(Cycle 2) Nâng cấp System `Interact` để xử lý đầu vào bàn phím",Coder,Done,Medium
 T064,"(Cycle 2) Đảm bảo System `Layout` được cập nhật sau khi tạo/xóa Task",Coder,Done,Medium
-T065,"(Cycle 2) Viết báo cáo triển khai V13 và cập nhật PKB",Coder,Done,High 
+T065,"(Cycle 2) Viết báo cáo triển khai V13 và cập nhật PKB",Coder,Done,High
+T066,"(Cycle 2) Chạy phân tích tĩnh (clippy, fmt) và sửa tất cả cảnh báo",Coder,Done,High
+T067,"(Cycle 2) Rà soát và tái cấu trúc các system của Cycle 2 (Interact, Command, Layout)",Coder,Done,Medium
+T068,"(Cycle 2) Đảm bảo tất cả code mới đều có bình luận rõ ràng",Coder,Done,Medium
+T069,"(Cycle 2) Xác minh codebase đạt trạng thái 'zero-warning'",Coder,Done,High
+T070,"(Cycle 2) Viết báo cáo triển khai V14 và cập nhật PKB",Coder,Done,High 

@@ -10,4 +10,4 @@ pub struct Bounds {
 
 pub struct Style {
     pub color: &'static str,
-} 
+}

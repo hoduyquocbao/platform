@@ -1,28 +1,27 @@
-use crate::components::core::*;
-use crate::resources::input::mod_rs::Resources;
-use crate::engine::System;
 use crate::World;
+use crate::components::core::*;
+use crate::engine::System;
+use crate::resources::input::mod_rs::Resources;
 
+/// Hệ thống xử lý tương tác chuột và bàn phím, bao gồm chọn, chỉnh sửa, tạo, xóa task.
 pub struct Interact;
 
 static mut LAST_PRESSED: bool = false;
 
-impl System for Interact {
-    fn run(&mut self, world: &mut World, resources: &mut Resources) {
-        let mouse = &resources.mouse;
-        let keyboard = &resources.keyboard;
-        // Reset Click và Hover ở đầu frame
+impl Interact {
+    /// Đặt lại trạng thái Click và Hover cho tất cả entity.
+    fn reset_hover_click(world: &mut World) {
         for id in 0..world.entity_count {
             world.clicks[id] = None;
             world.hovers[id] = None;
         }
-        // Chế độ vào/ra Editing
+    }
+    /// Xử lý vào/ra chế độ Editing dựa trên bàn phím.
+    fn handle_editing(world: &mut World, keyboard: &crate::resources::input::Keyboard) {
         for id in 0..world.entity_count {
-            // Vào chế độ Editing
             if world.selecteds[id].is_some() && keyboard.e && world.editings[id].is_none() {
                 world.editings[id] = Some(Editing);
             }
-            // Thoát Editing
             if world.editings[id].is_some() && (keyboard.enter || keyboard.escape) {
                 world.editings[id] = None;
                 if keyboard.enter {
@@ -30,12 +29,16 @@ impl System for Interact {
                 }
             }
         }
-        // Tạo task mới khi nhấn 'n'
+    }
+    /// Xử lý tạo task mới khi nhấn 'n'.
+    fn handle_create(world: &mut World, keyboard: &crate::resources::input::Keyboard) {
         if keyboard.key == Some('n') {
             let e = world.spawn();
             world.creates[e] = Some(Create);
         }
-        // Xóa task đang chọn khi nhấn 'd'
+    }
+    /// Xử lý xóa task đang chọn khi nhấn 'd'.
+    fn handle_delete(world: &mut World, keyboard: &crate::resources::input::Keyboard) {
         if keyboard.key == Some('d') {
             for id in 0..world.entity_count {
                 if world.selecteds[id].is_some() {
@@ -43,14 +46,20 @@ impl System for Interact {
                 }
             }
         }
-        // Hit detection và phát hiện click (chỉ khi không Editing)
+    }
+    /// Xử lý phát hiện hover, click, chọn entity bằng chuột.
+    fn handle_mouse_interaction(world: &mut World, mouse: &crate::resources::input::Mouse) {
         for id in 0..world.entity_count {
             if world.editings[id].is_some() {
                 continue;
             }
             if let Some(bounds) = &world.bounds[id] {
                 let (mx, my) = mouse.position;
-                if mx >= bounds.x && mx <= bounds.x + bounds.width && my >= bounds.y && my <= bounds.y + bounds.height {
+                if mx >= bounds.x
+                    && mx <= bounds.x + bounds.width
+                    && my >= bounds.y
+                    && my <= bounds.y + bounds.height
+                {
                     world.hovers[id] = Some(Hover);
                     if mouse.pressed {
                         for i in 0..world.entity_count {
@@ -58,7 +67,6 @@ impl System for Interact {
                         }
                         world.selecteds[id] = Some(Selected);
                     }
-                    // Phát hiện click (pressed true->false)
                     unsafe {
                         if LAST_PRESSED && !mouse.pressed {
                             world.clicks[id] = Some(Click);
@@ -67,9 +75,25 @@ impl System for Interact {
                 }
             }
         }
-        // Lưu trạng thái mouse.pressed cho frame sau
+    }
+    /// Lưu trạng thái mouse.pressed cho frame sau.
+    fn update_last_pressed(mouse: &crate::resources::input::Mouse) {
         unsafe {
             LAST_PRESSED = mouse.pressed;
         }
     }
-} 
+}
+
+impl System for Interact {
+    /// Hàm chính thực thi hệ thống tương tác mỗi frame.
+    fn run(&mut self, world: &mut World, resources: &mut Resources) {
+        let mouse = &resources.mouse;
+        let keyboard = &resources.keyboard;
+        Self::reset_hover_click(world);
+        Self::handle_editing(world, keyboard);
+        Self::handle_create(world, keyboard);
+        Self::handle_delete(world, keyboard);
+        Self::handle_mouse_interaction(world, mouse);
+        Self::update_last_pressed(mouse);
+    }
+}

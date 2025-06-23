@@ -20,4 +20,4 @@ pub mod mod_rs {
         pub mouse: Mouse,
         pub keyboard: Keyboard,
     }
-} 
+}

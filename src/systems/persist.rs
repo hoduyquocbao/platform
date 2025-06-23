@@ -1,6 +1,6 @@
-use crate::resources::input::mod_rs::Resources;
-use crate::engine::System;
 use crate::World;
+use crate::engine::System;
+use crate::resources::input::mod_rs::Resources;
 
 pub struct Persist;
 
@@ -13,4 +13,4 @@ impl System for Persist {
             }
         }
     }
-} 
+}

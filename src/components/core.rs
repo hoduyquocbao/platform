@@ -25,4 +25,4 @@ pub struct Dirty;
 pub struct Disabled;
 
 pub struct Create;
-pub struct Delete; 
+pub struct Delete;

@@ -1,7 +1,7 @@
-use crate::components::core::*;
-use crate::resources::input::mod_rs::Resources;
-use crate::engine::System;
 use crate::World;
+use crate::components::core::*;
+use crate::engine::System;
+use crate::resources::input::mod_rs::Resources;
 
 pub struct Toggle;
 
@@ -19,4 +19,4 @@ impl System for Toggle {
             }
         }
     }
-} 
+}
