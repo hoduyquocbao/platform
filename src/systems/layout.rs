@@ -1,7 +1,7 @@
 use crate::World;
 use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
-use crate::components::core::*;
+use crate::components::traits::Layoutable;
 
 /// Hệ thống sắp xếp các entity theo cấu trúc phân cấp, cập nhật x (thụt lề) và y.
 pub struct Layout;
@@ -11,6 +11,7 @@ impl Layout {
     fn layout_entity(world: &mut World, id: usize, depth: usize, y: &mut f32, spacing: f32, indent: f32) {
         if world.visibles[id].is_some() && world.bounds[id].is_some() {
             if let Some(bounds) = &mut world.bounds[id] {
+                let _node = bounds.node(); // dùng trait Layoutable
                 bounds.x = indent * depth as f32;
                 bounds.y = *y;
                 *y += spacing;

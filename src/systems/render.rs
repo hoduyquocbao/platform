@@ -1,6 +1,7 @@
 use crate::World;
 use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
+use crate::components::traits::Renderable;
 
 pub struct Render;
 
@@ -12,12 +13,10 @@ impl System for Render {
                 && world.texts[id].is_some()
                 && world.bounds[id].is_some()
             {
-                let text = world.texts[id]
-                    .as_ref()
-                    .map(|t| t.value.as_str())
-                    .unwrap_or("");
+                let text = world.texts[id].as_ref().map(|t| t.object().value.as_str()).unwrap_or("");
                 let bounds = world.bounds[id].as_ref().unwrap();
-                let status = if world.statuses[id].is_some() {
+                let status = if let Some(s) = world.statuses[id].as_ref() {
+                    s.object();
                     "[TODO]"
                 } else {
                     "[DONE]"

@@ -2,6 +2,7 @@ use crate::World;
 use crate::components::core::*;
 use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
+use crate::components::traits::Interactable;
 
 /// Hệ thống xử lý tương tác chuột và bàn phím, bao gồm chọn, chỉnh sửa, tạo, xóa task.
 pub struct Interact;
@@ -19,10 +20,10 @@ impl Interact {
     /// Xử lý vào/ra chế độ Editing dựa trên bàn phím.
     fn handle_editing(world: &mut World, keyboard: &crate::resources::input::Keyboard) {
         for id in 0..world.entity_count {
-            if world.selecteds[id].is_some() && keyboard.e && world.editings[id].is_none() {
+            if world.selecteds[id].as_ref().map(|s| s.target()).is_some() && keyboard.e && world.editings[id].is_none() {
                 world.editings[id] = Some(Editing);
             }
-            if world.editings[id].is_some() && (keyboard.enter || keyboard.escape) {
+            if world.editings[id].as_ref().map(|e| e.target()).is_some() && (keyboard.enter || keyboard.escape) {
                 world.editings[id] = None;
                 if keyboard.enter {
                     world.dirties[id] = Some(Dirty);
@@ -41,7 +42,7 @@ impl Interact {
     fn handle_delete(world: &mut World, keyboard: &crate::resources::input::Keyboard) {
         if keyboard.key == Some('d') {
             for id in 0..world.entity_count {
-                if world.selecteds[id].is_some() {
+                if world.selecteds[id].as_ref().map(|s| s.target()).is_some() {
                     world.deletes[id] = Some(Delete);
                 }
             }
@@ -50,7 +51,7 @@ impl Interact {
     /// Xử lý phát hiện hover, click, chọn entity bằng chuột.
     fn handle_mouse_interaction(world: &mut World, mouse: &crate::resources::input::Mouse) {
         for id in 0..world.entity_count {
-            if world.editings[id].is_some() {
+            if world.editings[id].as_ref().map(|e| e.target()).is_some() {
                 continue;
             }
             if let Some(bounds) = &world.bounds[id] {

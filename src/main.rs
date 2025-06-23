@@ -1,6 +1,7 @@
 mod components {
     pub mod core;
     pub mod ui;
+    pub mod traits;
 }
 mod resources {
     pub mod input;
