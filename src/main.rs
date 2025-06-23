@@ -11,6 +11,8 @@ mod systems {
     pub mod layout;
     pub mod render;
     pub mod persist;
+    pub mod edit;
+    pub mod text;
 }
 
 use components::core::*;
@@ -18,6 +20,8 @@ use components::ui::*;
 use resources::input::*;
 use systems::*;
 use components::ui::Hover as UiHover;
+
+use systems::edit::{Keyboard, Key};
 
 type Entity = usize;
 
@@ -99,6 +103,7 @@ pub struct App {
     world: World,
     scheduler: Scheduler,
     mouse: Mouse,
+    keyboard: Keyboard,
 }
 
 impl App {
@@ -107,13 +112,13 @@ impl App {
             world: World::new(),
             scheduler: Scheduler::new(),
             mouse: Mouse { position: (0.0, 0.0), pressed: false },
+            keyboard: Keyboard { key: None },
         };
         app.initialize();
         app
     }
 
     fn initialize(&mut self) {
-        // Đăng ký các system theo thứ tự: interact, layout, render, persist
         self.scheduler.add(interaction::interact);
         self.scheduler.add(layout::layout);
         self.scheduler.add(render::render);
@@ -151,7 +156,21 @@ impl App {
         self.mouse.position.0 += 10.0;
         self.mouse.position.1 += 5.0;
         self.mouse.pressed = !self.mouse.pressed;
+        // Giả lập keyboard input: frame 1 nhấn 'e', frame 2 nhập 'A', frame 3 nhấn Enter
+        static mut FRAME: usize = 0;
+        unsafe {
+            FRAME += 1;
+            self.keyboard.key = match FRAME {
+                1 => Some(Key::E),
+                2 => Some(Key::Char('A')),
+                3 => Some(Key::Enter),
+                _ => None,
+            };
+        }
         self.scheduler.run(&mut self.world, &self.mouse);
+        // Truyền keyboard cho edit và text system
+        edit::edit(&mut self.world, &self.keyboard);
+        text::text(&mut self.world, &self.keyboard);
     }
 }
 

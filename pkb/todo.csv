@@ -24,4 +24,9 @@ T022,"Chính thức hóa việc tạo Component sự kiện `Click`",Coder,Done,
 T023,"Tái cấu trúc System `Toggle` để được điều khiển bởi sự kiện `Click`",Coder,Done,High
 T024,"Triển khai logic nghiệp vụ và đánh dấu `Dirty` trong `Toggle`",Coder,Done,High
 T025,"Xác minh luồng dữ liệu hoàn chỉnh đến System `Persist`",Coder,Done,Medium
-T026,"Viết báo cáo triển khai V5 và cập nhật PKB",Coder,Done,High 
+T026,"Viết báo cáo triển khai V5 và cập nhật PKB",Coder,Done,High
+T027,"Nâng cấp System `Layout` để sắp xếp Entity theo chiều dọc",Coder,Done,High
+T028,"Triển khai cơ chế vào/ra 'Chế độ Chỉnh sửa' (Editing Mode)",Coder,Done,High
+T029,"Tạo System `Text` để xử lý đầu vào văn bản khi đang chỉnh sửa",Coder,Done,High
+T030,"Nâng cấp System `Render` để hiển thị bố cục và trạng thái chỉnh sửa",Coder,Done,Medium
+T031,"Viết báo cáo triển khai V6 và cập nhật PKB",Coder,Done,High 

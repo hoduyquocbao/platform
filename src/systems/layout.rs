@@ -1,7 +1,17 @@
 use crate::components::core::*;
+use crate::components::ui::*;
 use crate::World;
 use crate::resources::input::*;
 
-pub fn layout(_world: &mut World, _mouse: &Mouse) {
-    println!("[Layout] Đã sắp xếp các entity có Visible");
+pub fn layout(world: &mut World, _mouse: &Mouse) {
+    let mut y = 0.0;
+    let spacing = 40.0;
+    for id in 0..world.entity_count {
+        if world.visibles[id].is_some() && world.bounds[id].is_some() {
+            if let Some(bounds) = &mut world.bounds[id] {
+                bounds.y = y;
+                y += spacing;
+            }
+        }
+    }
 } 
