@@ -1,11 +1,13 @@
 use crate::World;
+use crate::components::core::Visible;
 use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
-use crate::components::core::Visible;
 
+/// System chịu trách nhiệm lọc entity theo text, status, overdue và cập nhật trạng thái Visible.
 pub struct FilterSystem;
 
 impl System for FilterSystem {
+    /// Lọc entity theo các tiêu chí trong resource Filter, cập nhật trạng thái Visible cho entity phù hợp.
     fn run(&mut self, world: &mut World, resources: &mut Resources) {
         let filter = &resources.filter;
         let now = resources.time.now;
@@ -17,7 +19,10 @@ impl System for FilterSystem {
         for id in 0..world.entity_count {
             // Lọc theo text
             if let Some(ref text) = filter.text {
-                let t = world.texts[id].as_ref().map(|t| t.value.as_str()).unwrap_or("");
+                let t = world.texts[id]
+                    .as_ref()
+                    .map(|t| t.value.as_str())
+                    .unwrap_or("");
                 if !t.contains(text) {
                     continue;
                 }
@@ -40,4 +45,4 @@ impl System for FilterSystem {
             world.visibles[id] = Some(Visible);
         }
     }
-} 
+}

@@ -1,29 +1,34 @@
 use crate::World;
 use crate::components::core::*;
+use crate::components::traits::Interactable;
 use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
-use crate::components::traits::Interactable;
 
-/// Hệ thống xử lý tương tác chuột và bàn phím, bao gồm chọn, chỉnh sửa, tạo, xóa task.
+/// System xử lý toàn bộ logic tương tác chuột và bàn phím: chọn, chỉnh sửa, tạo, xóa, đặt ngày hết hạn, lọc, v.v.
 pub struct Interact;
 
 static mut LAST_PRESSED: bool = false;
 
 impl Interact {
-    /// Đặt lại trạng thái Click và Hover cho tất cả entity.
+    /// Đặt lại trạng thái Click và Hover cho tất cả entity (reset mỗi frame).
     fn reset_hover_click(world: &mut World) {
         for id in 0..world.entity_count {
             world.clicks[id] = None;
             world.hovers[id] = None;
         }
     }
-    /// Xử lý vào/ra chế độ Editing dựa trên bàn phím.
+    /// Xử lý vào/ra chế độ Editing dựa trên bàn phím (E, Enter, Escape).
     fn handle_editing(world: &mut World, keyboard: &crate::resources::input::Keyboard) {
         for id in 0..world.entity_count {
-            if world.selecteds[id].as_ref().map(|s| s.target()).is_some() && keyboard.e && world.editings[id].is_none() {
+            if world.selecteds[id].as_ref().map(|s| s.target()).is_some()
+                && keyboard.e
+                && world.editings[id].is_none()
+            {
                 world.editings[id] = Some(Editing);
             }
-            if world.editings[id].as_ref().map(|e| e.target()).is_some() && (keyboard.enter || keyboard.escape) {
+            if world.editings[id].as_ref().map(|e| e.target()).is_some()
+                && (keyboard.enter || keyboard.escape)
+            {
                 world.editings[id] = None;
                 if keyboard.enter {
                     world.dirties[id] = Some(Dirty);
@@ -48,11 +53,14 @@ impl Interact {
             }
         }
     }
-    /// Xử lý đặt/sửa ngày hết hạn (Due date) cho entity Selected.
+    /// Xử lý đặt/sửa ngày hết hạn (Due date) cho entity Selected (t, nhập số, Enter, Escape).
     fn handle_due(world: &mut World, keyboard: &crate::resources::input::Keyboard) {
         // Bước 1: Nếu có entity Selected và nhấn 't', thêm Scheduling
         for id in 0..world.entity_count {
-            if world.selecteds[id].is_some() && keyboard.key == Some('t') && world.schedulings[id].is_none() {
+            if world.selecteds[id].is_some()
+                && keyboard.key == Some('t')
+                && world.schedulings[id].is_none()
+            {
                 world.schedulings[id] = Some(Scheduling);
             }
         }
@@ -107,7 +115,10 @@ impl Interact {
         }
     }
     /// Xử lý tìm kiếm/lọc: nhấn '/' vào chế độ search, nhập ký tự cập nhật Filter.text, 's' lọc Status, 'o' lọc overdue.
-    fn handle_filter(filter: &mut crate::resources::input::Filter, keyboard: &crate::resources::input::Keyboard) {
+    fn handle_filter(
+        filter: &mut crate::resources::input::Filter,
+        keyboard: &crate::resources::input::Keyboard,
+    ) {
         use std::cell::RefCell;
         thread_local! {
             static SEARCH_MODE: RefCell<bool> = const { RefCell::new(false) };
@@ -136,7 +147,9 @@ impl Interact {
             if keyboard.enter || keyboard.escape {
                 SEARCH_MODE.with(|m| *m.borrow_mut() = false);
                 if let Some(s) = &filter.text {
-                    if s.is_empty() { filter.text = None; }
+                    if s.is_empty() {
+                        filter.text = None;
+                    }
                 }
             }
         }
@@ -152,7 +165,7 @@ impl Interact {
             filter.overdue = !filter.overdue;
         }
     }
-    /// Xử lý phát hiện hover, click, chọn entity bằng chuột.
+    /// Xử lý phát hiện hover, click, chọn entity bằng chuột (bao gồm toggle collapsed).
     fn handle_mouse_interaction(world: &mut World, mouse: &crate::resources::input::Mouse) {
         for id in 0..world.entity_count {
             if world.editings[id].as_ref().map(|e| e.target()).is_some() {
@@ -161,8 +174,14 @@ impl Interact {
             if let Some(bounds) = &world.bounds[id] {
                 let (mx, my) = mouse.position;
                 let icon_width = 24.0; // vùng biểu tượng mở/đóng bên trái
-                let in_icon = mx >= bounds.x && mx <= bounds.x + icon_width && my >= bounds.y && my <= bounds.y + bounds.height;
-                let in_main = mx > bounds.x + icon_width && mx <= bounds.x + bounds.width && my >= bounds.y && my <= bounds.y + bounds.height;
+                let in_icon = mx >= bounds.x
+                    && mx <= bounds.x + icon_width
+                    && my >= bounds.y
+                    && my <= bounds.y + bounds.height;
+                let in_main = mx > bounds.x + icon_width
+                    && mx <= bounds.x + bounds.width
+                    && my >= bounds.y
+                    && my <= bounds.y + bounds.height;
                 if in_icon && world.childrens[id].is_some() {
                     world.hovers[id] = Some(Hover);
                     if mouse.pressed {
@@ -197,7 +216,7 @@ impl Interact {
             }
         }
     }
-    /// Lưu trạng thái mouse.pressed cho frame sau.
+    /// Lưu trạng thái mouse.pressed cho frame sau (phục vụ phát hiện click).
     fn update_last_pressed(mouse: &crate::resources::input::Mouse) {
         unsafe {
             LAST_PRESSED = mouse.pressed;
@@ -206,7 +225,7 @@ impl Interact {
 }
 
 impl System for Interact {
-    /// Hàm chính thực thi hệ thống tương tác mỗi frame.
+    /// Hàm chính thực thi hệ thống tương tác mỗi frame (gọi lần lượt các handler phụ trợ).
     fn run(&mut self, world: &mut World, resources: &mut Resources) {
         let keyboard = &resources.keyboard;
         Self::handle_filter(&mut resources.filter, keyboard);

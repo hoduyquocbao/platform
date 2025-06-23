@@ -1,20 +1,20 @@
 mod components {
     pub mod core;
-    pub mod ui;
     pub mod traits;
+    pub mod ui;
 }
 mod resources {
     pub mod input;
 }
 mod systems {
     pub mod command;
+    pub mod filter;
     pub mod interaction;
     pub mod layout;
     pub mod persist;
     pub mod render;
     pub mod text;
     pub mod toggle;
-    pub mod filter;
 }
 mod engine;
 use engine::System;
@@ -193,8 +193,14 @@ impl App {
 
     fn initialize(&mut self) {
         use systems::{
-            command::{Create, Delete}, interaction::Interact, layout::Layout, persist::Persist,
-            render::Render, text::TextSystem, toggle::Toggle, filter::FilterSystem,
+            command::{Create, Delete},
+            filter::FilterSystem,
+            interaction::Interact,
+            layout::Layout,
+            persist::Persist,
+            render::Render,
+            text::TextSystem,
+            toggle::Toggle,
         };
         self.scheduler.add(Box::new(Interact));
         self.scheduler.add(Box::new(FilterSystem));

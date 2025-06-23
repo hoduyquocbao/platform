@@ -1,14 +1,14 @@
 use crate::World;
+use crate::components::core::Delete as CoreDelete;
 use crate::components::core::*;
 use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
-use crate::components::core::Delete as CoreDelete;
 
-/// Hệ thống xử lý lệnh tạo task mới dựa trên component Create.
+/// System xử lý lệnh tạo task mới dựa trên component Create.
 pub struct Create;
 
 impl System for Create {
-    /// Thực thi tạo task mới cho mỗi entity có component Create.
+    /// Thực thi tạo task mới cho mỗi entity có component Create, tự động gán parent nếu có entity đang Selected.
     fn run(&mut self, world: &mut World, _resources: &mut Resources) {
         for id in 0..world.entity_count {
             if world.creates[id].is_some() {
@@ -48,11 +48,11 @@ impl System for Create {
     }
 }
 
-/// Hệ thống xử lý lệnh xóa task dựa trên component Delete.
+/// System xử lý lệnh xóa task dựa trên component Delete, hỗ trợ xóa theo tầng (cascading deletes).
 pub struct Delete;
 
 impl System for Delete {
-    /// Thực thi xóa entity cho mỗi entity có component Delete, bao gồm xóa theo tầng (cascading deletes).
+    /// Thực thi xóa entity cho mỗi entity có component Delete, bao gồm xóa theo tầng (cascading deletes) bằng stack.
     fn run(&mut self, world: &mut World, _resources: &mut Resources) {
         // Đánh dấu Delete cho toàn bộ cây con trước khi xóa entity cha
         fn mark_cascade(world: &mut World, root_id: usize) {

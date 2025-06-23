@@ -1,14 +1,21 @@
 use crate::World;
+use crate::components::traits::Layoutable;
 use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
-use crate::components::traits::Layoutable;
 
-/// Hệ thống sắp xếp các entity theo cấu trúc phân cấp, cập nhật x (thụt lề) và y.
+/// System sắp xếp các entity theo cấu trúc phân cấp, cập nhật vị trí x/y dựa trên depth và thứ tự.
 pub struct Layout;
 
 impl Layout {
     /// Duyệt cây entity theo quan hệ Parent/Children, cập nhật x/y theo depth và thứ tự.
-    fn layout_entity(world: &mut World, id: usize, depth: usize, y: &mut f32, spacing: f32, indent: f32) {
+    fn layout_entity(
+        world: &mut World,
+        id: usize,
+        depth: usize,
+        y: &mut f32,
+        spacing: f32,
+        indent: f32,
+    ) {
         if world.visibles[id].is_some() && world.bounds[id].is_some() {
             if let Some(bounds) = &mut world.bounds[id] {
                 let _node = bounds.node(); // dùng trait Layoutable
@@ -34,7 +41,7 @@ impl Layout {
 }
 
 impl System for Layout {
-    /// Cập nhật vị trí x/y cho tất cả entity theo cấu trúc phân cấp.
+    /// Cập nhật vị trí x/y cho tất cả entity theo cấu trúc phân cấp (gốc -> con).
     fn run(&mut self, world: &mut World, _resources: &mut Resources) {
         let spacing = 40.0;
         let indent = 32.0;

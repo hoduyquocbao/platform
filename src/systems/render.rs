@@ -1,11 +1,13 @@
 use crate::World;
+use crate::components::traits::Renderable;
 use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
-use crate::components::traits::Renderable;
 
+/// System chịu trách nhiệm render (hiển thị) toàn bộ entity ra UI, bao gồm trạng thái, style, due date, filter.
 pub struct Render;
 
 impl System for Render {
+    /// Render toàn bộ entity Visible ra UI, hiển thị trạng thái, style, due date, filter.
     fn run(&mut self, world: &mut World, resources: &mut Resources) {
         let now = resources.time.now;
         println!("--- FRAME START ---");
@@ -14,7 +16,10 @@ impl System for Render {
                 && world.texts[id].is_some()
                 && world.bounds[id].is_some()
             {
-                let text = world.texts[id].as_ref().map(|t| t.object().value.as_str()).unwrap_or("");
+                let text = world.texts[id]
+                    .as_ref()
+                    .map(|t| t.object().value.as_str())
+                    .unwrap_or("");
                 let bounds = world.bounds[id].as_ref().unwrap();
                 let status = if let Some(s) = world.statuses[id].as_ref() {
                     s.object();
@@ -54,7 +59,16 @@ impl System for Render {
                 let indent_str = "  ".repeat(indent);
                 println!(
                     "{}{}{} {} ({}, {}) {}{} {} {}",
-                    indent_str, icon, prefix, status, bounds.x, bounds.y, display_text, due_str, style, id
+                    indent_str,
+                    icon,
+                    prefix,
+                    status,
+                    bounds.x,
+                    bounds.y,
+                    display_text,
+                    due_str,
+                    style,
+                    id
                 );
             }
         }
