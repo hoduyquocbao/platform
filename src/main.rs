@@ -240,61 +240,43 @@ impl App {
         self.scheduler.add(Box::new(Persist));
         self.scheduler.add(Box::new(Toggle));
         self.scheduler.add(Box::new(TextSystem));
-        // Xóa logic tạo danh sách công việc phẳng hiện tại
-        // Tạo cây Entity UI mẫu: root (Container, Flow::Column), header, content (Container, Flow::Column), footer, các task mẫu là con của content
+        // Tái cấu trúc layout chính thành Master-Detail
         let root = self.world.spawn();
         self.world.bounds[root] = Some(Bounds { x: 0.0, y: 0.0, width: 800.0, height: 600.0 });
         self.world.styles[root] = Some(Style { color: "#f0f0f0" });
         self.world.visibles[root] = Some(Visible);
         self.world.childrens[root] = Some(Children(vec![]));
         self.world.container[root] = Some(Container);
-        self.world.flows[root] = Some(Flow::Column);
-        // Header
-        let header = self.world.spawn();
-        self.world.bounds[header] = Some(Bounds { x: 0.0, y: 0.0, width: 800.0, height: 60.0 });
-        self.world.styles[header] = Some(Style { color: "#1976d2" });
-        self.world.visibles[header] = Some(Visible);
-        self.world.texts[header] = Some(Text { value: "HEADER".to_string() });
-        self.world.parents[header] = Some(Parent(root));
-        if let Some(children) = &mut self.world.childrens[root] { children.0.push(header); }
-        // Content
-        let content = self.world.spawn();
-        self.world.bounds[content] = Some(Bounds { x: 0.0, y: 60.0, width: 800.0, height: 480.0 });
-        self.world.styles[content] = Some(Style { color: "#ffffff" });
-        self.world.visibles[content] = Some(Visible);
-        self.world.childrens[content] = Some(Children(vec![]));
-        self.world.container[content] = Some(Container);
-        self.world.flows[content] = Some(Flow::Column);
-        self.world.parents[content] = Some(Parent(root));
-        if let Some(children) = &mut self.world.childrens[root] { children.0.push(content); }
-        // Footer
-        let footer = self.world.spawn();
-        self.world.bounds[footer] = Some(Bounds { x: 0.0, y: 540.0, width: 800.0, height: 60.0 });
-        self.world.styles[footer] = Some(Style { color: "#424242" });
-        self.world.visibles[footer] = Some(Visible);
-        self.world.texts[footer] = Some(Text { value: "FOOTER".to_string() });
-        self.world.parents[footer] = Some(Parent(root));
-        if let Some(children) = &mut self.world.childrens[root] { children.0.push(footer); }
-        // Gán Justify::Center cho footer
-        self.world.justifys[footer] = Some(Justify::Center);
-        // Thêm Button "Create" vào footer
-        let button = self.world.spawn();
-        self.world.bounds[button] = Some(Bounds { x: 0.0, y: 0.0, width: 120.0, height: 40.0 });
-        self.world.styles[button] = Some(Style { color: "#ffb300" });
-        self.world.visibles[button] = Some(Visible);
-        self.world.texts[button] = Some(Text { value: "Create".to_string() });
-        self.world.buttons[button] = Some(Button("Create".to_string()));
-        self.world.parents[button] = Some(Parent(footer));
-        if let Some(children) = &mut self.world.childrens[footer] { children.0.push(button); }
-        // Các task mẫu là con của content
+        self.world.flows[root] = Some(Flow::Row);
+        // Master panel (danh sách task)
+        let master_panel = self.world.spawn();
+        self.world.bounds[master_panel] = Some(Bounds { x: 0.0, y: 0.0, width: 400.0, height: 600.0 });
+        self.world.styles[master_panel] = Some(Style { color: "#ffffff" });
+        self.world.visibles[master_panel] = Some(Visible);
+        self.world.childrens[master_panel] = Some(Children(vec![]));
+        self.world.container[master_panel] = Some(Container);
+        self.world.flows[master_panel] = Some(Flow::Column);
+        self.world.parents[master_panel] = Some(Parent(root));
+        if let Some(children) = &mut self.world.childrens[root] { children.0.push(master_panel); }
+        // Detail panel (hiện thông tin chi tiết)
+        let detail_panel = self.world.spawn();
+        self.world.bounds[detail_panel] = Some(Bounds { x: 400.0, y: 0.0, width: 400.0, height: 600.0 });
+        self.world.styles[detail_panel] = Some(Style { color: "#e3e3e3" });
+        self.world.visibles[detail_panel] = Some(Visible);
+        self.world.childrens[detail_panel] = Some(Children(vec![]));
+        self.world.container[detail_panel] = Some(Container);
+        self.world.flows[detail_panel] = Some(Flow::Column);
+        self.world.parents[detail_panel] = Some(Parent(root));
+        if let Some(children) = &mut self.world.childrens[root] { children.0.push(detail_panel); }
+        // Thêm các task mẫu vào master_panel
         for i in 0..3 {
             let task = self.world.spawn();
-            self.world.bounds[task] = Some(Bounds { x: 0.0, y: 0.0, width: 760.0, height: 40.0 });
+            self.world.bounds[task] = Some(Bounds { x: 0.0, y: 0.0, width: 380.0, height: 40.0 });
             self.world.styles[task] = Some(Style { color: "#e3f2fd" });
             self.world.visibles[task] = Some(Visible);
             self.world.texts[task] = Some(Text { value: format!("Task {}", i + 1) });
-            self.world.parents[task] = Some(Parent(content));
-            if let Some(children) = &mut self.world.childrens[content] { children.0.push(task); }
+            self.world.parents[task] = Some(Parent(master_panel));
+            if let Some(children) = &mut self.world.childrens[master_panel] { children.0.push(task); }
         }
     }
 

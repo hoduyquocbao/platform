@@ -1,6 +1,5 @@
 use crate::World;
-use crate::components::traits::Layoutable;
-use crate::components::ui::{Container, Flow, Align, Justify, Bounds};
+use crate::components::ui::{Flow, Align, Justify, Bounds};
 use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
 
@@ -14,13 +13,11 @@ impl Layout {
         id: usize,
         bounds: Bounds,
     ) {
-        // Nếu entity là container
         let is_container = world.container[id].is_some();
         let flow = world.flows.get(id).and_then(|f| f.as_ref()).cloned().unwrap_or(Flow::Column);
         let align = world.aligns.get(id).and_then(|a| a.as_ref()).cloned().unwrap_or(Align::Start);
         let justify = world.justifys.get(id).and_then(|j| j.as_ref()).cloned().unwrap_or(Justify::Start);
         if is_container {
-            // Lấy danh sách con
             let children_ids = if let Some(children) = &world.childrens[id] {
                 children.0.clone()
             } else {
@@ -28,9 +25,7 @@ impl Layout {
             };
             let n = children_ids.len();
             if n == 0 { return; }
-            // clone children_ids để không borrow world khi vào vòng lặp
             let children_ids = children_ids.clone();
-            // Tính toán kích thước cho từng con
             match flow {
                 Flow::Column => {
                     let total_height: f32 = bounds.height;
@@ -47,14 +42,13 @@ impl Layout {
                         }
                     };
                     y += start_offset;
-                    for (i, &child_id) in children_ids.iter().enumerate() {
+                    for &child_id in children_ids.iter() {
                         let mut child_bounds = Bounds {
                             x: bounds.x,
                             y,
                             width: bounds.width,
                             height: child_height,
                         };
-                        // Align trên trục phụ (x)
                         match align {
                             Align::Start => {},
                             Align::Center => {
@@ -84,14 +78,13 @@ impl Layout {
                         }
                     };
                     x += start_offset;
-                    for (i, &child_id) in children_ids.iter().enumerate() {
+                    for &child_id in children_ids.iter() {
                         let mut child_bounds = Bounds {
                             x,
                             y: bounds.y,
                             width: child_width,
                             height: bounds.height,
                         };
-                        // Align trên trục phụ (y)
                         match align {
                             Align::Start => {},
                             Align::Center => {
@@ -116,7 +109,7 @@ impl System for Layout {
     fn run(&mut self, world: &mut World, _resources: &mut Resources) {
         for id in 0..world.entity_count {
             if world.parents[id].is_none() && world.container[id].is_some() {
-                if let Some(bounds) = world.bounds[id].clone() {
+                if let Some(bounds) = world.bounds[id] {
                     Self::layout_container(world, id, bounds);
                 }
             }

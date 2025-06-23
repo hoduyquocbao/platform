@@ -119,5 +119,61 @@ impl System for Render {
                 }
             }
         }
+        // Vẽ detail panel nếu có entity Selected
+        let selected_id = (0..world.entity_count).find(|&id| world.selecteds[id].is_some());
+        let detail_panel_id = (0..world.entity_count).find(|&id| {
+            world.styles[id].as_ref().is_some_and(|st| st.color == "#e3e3e3")
+        });
+        if let (Some(sel), Some(detail)) = (selected_id, detail_panel_id) {
+            if let Some(bounds) = world.bounds[detail] {
+                let x0 = bounds.x as usize + 16;
+                let y0 = bounds.y as usize + 32;
+                let cursor_y = y0;
+                let font_size = (bounds.height * 0.06).max(14.0);
+                let text_color = 0xFF222222;
+                // Vẽ tiêu đề
+                if let Some(text) = world.texts[sel].as_ref() {
+                    let label = format!("Task: {}", text.value);
+                    let mut cursor_x = x0;
+                    let baseline = cursor_y + (font_size as usize);
+                    for ch in label.chars() {
+                        let (metrics, bitmap) = font.rasterize(ch, font_size);
+                        let glyph_y = baseline.saturating_sub(metrics.height / 2);
+                        blit_glyph(
+                            framebuffer, width, height, cursor_x, glyph_y, &bitmap, metrics.width, metrics.height, text_color,
+                        );
+                        cursor_x += metrics.advance_width as usize;
+                    }
+                }
+                // Vẽ trạng thái
+                if world.statuses[sel].is_some() {
+                    let label = "Status: Active";
+                    let mut cursor_x = x0;
+                    let baseline = cursor_y + (font_size as usize);
+                    for ch in label.chars() {
+                        let (metrics, bitmap) = font.rasterize(ch, font_size);
+                        let glyph_y = baseline.saturating_sub(metrics.height / 2);
+                        blit_glyph(
+                            framebuffer, width, height, cursor_x, glyph_y, &bitmap, metrics.width, metrics.height, text_color,
+                        );
+                        cursor_x += metrics.advance_width as usize;
+                    }
+                }
+                // Vẽ Due nếu có
+                if let Some(due) = world.dues[sel].as_ref() {
+                    let label = format!("Due: {}", due.0);
+                    let mut cursor_x = x0;
+                    let baseline = cursor_y + (font_size as usize);
+                    for ch in label.chars() {
+                        let (metrics, bitmap) = font.rasterize(ch, font_size);
+                        let glyph_y = baseline.saturating_sub(metrics.height / 2);
+                        blit_glyph(
+                            framebuffer, width, height, cursor_x, glyph_y, &bitmap, metrics.width, metrics.height, text_color,
+                        );
+                        cursor_x += metrics.advance_width as usize;
+                    }
+                }
+            }
+        }
     }
 }
