@@ -1,6 +1,7 @@
 use crate::components::traits::Layoutable;
 
 /// Component lưu trữ thông tin vị trí và kích thước của entity trên UI.
+#[derive(Clone, Copy)]
 pub struct Bounds {
     pub x: f32,
     pub y: f32,
@@ -21,4 +22,27 @@ impl Layoutable for Bounds {
 /// Component lưu trữ thông tin style (màu sắc) cho entity trên UI.
 pub struct Style {
     pub color: &'static str,
+}
+
+/// Tag component đánh dấu một entity là container layout
+pub struct Container;
+
+/// Dòng/chữ dọc cho container
+pub enum Flow {
+    Row,
+    Column,
+}
+
+/// Căn chỉnh theo trục phụ
+pub enum Align {
+    Start,
+    Center,
+    End,
+}
+
+/// Phân phối không gian theo trục chính
+pub enum Justify {
+    Start,
+    End,
+    Between,
 }

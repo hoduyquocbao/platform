@@ -55,6 +55,8 @@ pub struct World {
     pub dues: Vec<Option<Due>>,
     pub schedulings: Vec<Option<Scheduling>>,
     pub entity_count: usize,
+    pub container: Option<Container>,
+    pub flows: Option<Flow>,
 }
 
 impl World {
@@ -82,6 +84,8 @@ impl World {
             dues: vec![],
             schedulings: vec![],
             entity_count: 0,
+            container: None,
+            flows: None,
         }
     }
     pub fn spawn(&mut self) -> Entity {
@@ -220,52 +224,51 @@ impl App {
         self.scheduler.add(Box::new(Persist));
         self.scheduler.add(Box::new(Toggle));
         self.scheduler.add(Box::new(TextSystem));
-        // Khởi tạo entity mẫu với Bounds và Style
-        let e0 = self.world.spawn();
-        self.world.texts[e0] = Some(Text {
-            value: "Task 1".to_string(),
-        });
-        self.world.statuses[e0] = Some(Status);
-        self.world.priorities[e0] = Some(Priority);
-        self.world.selecteds[e0] = None;
-        self.world.visibles[e0] = Some(Visible);
-        self.world.bounds[e0] = Some(Bounds {
-            x: 0.0,
-            y: 0.0,
-            width: 100.0,
-            height: 30.0,
-        });
-        self.world.styles[e0] = Some(Style { color: "blue" });
-        let e1 = self.world.spawn();
-        self.world.texts[e1] = Some(Text {
-            value: "Task 2".to_string(),
-        });
-        self.world.statuses[e1] = Some(Status);
-        self.world.priorities[e1] = Some(Priority);
-        self.world.editings[e1] = Some(Editing);
-        self.world.visibles[e1] = Some(Visible);
-        self.world.bounds[e1] = Some(Bounds {
-            x: 0.0,
-            y: 40.0,
-            width: 100.0,
-            height: 30.0,
-        });
-        self.world.styles[e1] = Some(Style { color: "green" });
-        let e2 = self.world.spawn();
-        self.world.texts[e2] = Some(Text {
-            value: "Task 3".to_string(),
-        });
-        self.world.statuses[e2] = Some(Status);
-        self.world.priorities[e2] = Some(Priority);
-        self.world.dirties[e2] = Some(Dirty);
-        self.world.visibles[e2] = Some(Visible);
-        self.world.bounds[e2] = Some(Bounds {
-            x: 0.0,
-            y: 80.0,
-            width: 100.0,
-            height: 30.0,
-        });
-        self.world.styles[e2] = Some(Style { color: "red" });
+        // Xóa logic tạo danh sách công việc phẳng hiện tại
+        // Tạo cây Entity UI mẫu: root (Container, Flow::Column), header, content (Container, Flow::Column), footer, các task mẫu là con của content
+        let root = self.world.spawn();
+        self.world.bounds[root] = Some(Bounds { x: 0.0, y: 0.0, width: 800.0, height: 600.0 });
+        self.world.styles[root] = Some(Style { color: "#f0f0f0" });
+        self.world.visibles[root] = Some(Visible);
+        self.world.childrens[root] = Some(Children(vec![]));
+        self.world.container = Some(Container);
+        self.world.flows = Some(Flow::Column);
+        // Header
+        let header = self.world.spawn();
+        self.world.bounds[header] = Some(Bounds { x: 0.0, y: 0.0, width: 800.0, height: 60.0 });
+        self.world.styles[header] = Some(Style { color: "#1976d2" });
+        self.world.visibles[header] = Some(Visible);
+        self.world.texts[header] = Some(Text { value: "HEADER".to_string() });
+        self.world.parents[header] = Some(Parent(root));
+        if let Some(children) = &mut self.world.childrens[root] { children.0.push(header); }
+        // Content
+        let content = self.world.spawn();
+        self.world.bounds[content] = Some(Bounds { x: 0.0, y: 60.0, width: 800.0, height: 480.0 });
+        self.world.styles[content] = Some(Style { color: "#ffffff" });
+        self.world.visibles[content] = Some(Visible);
+        self.world.childrens[content] = Some(Children(vec![]));
+        self.world.container = Some(Container);
+        self.world.flows = Some(Flow::Column);
+        self.world.parents[content] = Some(Parent(root));
+        if let Some(children) = &mut self.world.childrens[root] { children.0.push(content); }
+        // Footer
+        let footer = self.world.spawn();
+        self.world.bounds[footer] = Some(Bounds { x: 0.0, y: 540.0, width: 800.0, height: 60.0 });
+        self.world.styles[footer] = Some(Style { color: "#424242" });
+        self.world.visibles[footer] = Some(Visible);
+        self.world.texts[footer] = Some(Text { value: "FOOTER".to_string() });
+        self.world.parents[footer] = Some(Parent(root));
+        if let Some(children) = &mut self.world.childrens[root] { children.0.push(footer); }
+        // Các task mẫu là con của content
+        for i in 0..3 {
+            let task = self.world.spawn();
+            self.world.bounds[task] = Some(Bounds { x: 0.0, y: 0.0, width: 760.0, height: 40.0 });
+            self.world.styles[task] = Some(Style { color: "#e3f2fd" });
+            self.world.visibles[task] = Some(Visible);
+            self.world.texts[task] = Some(Text { value: format!("Task {}", i + 1) });
+            self.world.parents[task] = Some(Parent(content));
+            if let Some(children) = &mut self.world.childrens[content] { children.0.push(task); }
+        }
     }
 
     pub fn run_with_framebuffer(&mut self, framebuffer: &mut [u32], width: usize, height: usize) {

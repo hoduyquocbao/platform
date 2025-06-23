@@ -127,4 +127,9 @@ T125,"(Cycle 4) Định nghĩa enum Error tùy chỉnh cho ứng dụng",Coder,O
 T126,"(Cycle 4) Tái cấu trúc logic tải font để trả về Result, loại bỏ panic",Coder,Open,Critical
 T127,"(Cycle 4) Xử lý Result trong hàm main để thoát an toàn hoặc phục hồi mềm",Coder,Open,Critical
 T128,"(Cycle 4) Xác minh ứng dụng không còn panic khi file font bị lỗi/thiếu",Coder,Open,High
-T129,"(Cycle 4) Viết báo cáo triển khai V26 và cập nhật PKB",Coder,Open,High 
+T129,"(Cycle 4) Viết báo cáo triển khai V26 và cập nhật PKB",Coder,Open,High
+T130,"(Cycle 4) Hiện thực hóa các Component Bố cục (Container, Flow, etc.)",Coder,Open,High
+T131,"(Cycle 4) Tái cấu trúc System `Layout` để hỗ trợ container lồng nhau",Coder,Open,Critical
+T132,"(Cycle 4) Xây dựng cấu trúc UI mẫu (Header, Content, Footer)",Coder,Open,High
+T133,"(Cycle 4) Xác minh hệ thống layout hoạt động đúng",Coder,Open,High
+T134,"(Cycle 4) Viết báo cáo triển khai V27 và cập nhật PKB",Coder,Open,High 
