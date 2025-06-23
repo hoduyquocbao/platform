@@ -39,4 +39,8 @@ T037,"Phân tích và loại bỏ các module và component không sử dụng",
 T038,"Sửa tất cả các cảnh báo về style và idiom từ cargo clippy",Coder,Done,Medium
 T039,"Triển khai Default trait cho các struct chính theo gợi ý",Coder,Done,Medium
 T040,"Xác minh codebase đạt trạng thái 'zero-warning' với cargo clippy",Coder,Done,High
-T041,"Viết báo cáo triển khai V8 và cập nhật PKB",Coder,Done,High 
+T041,"Viết báo cáo triển khai V8 và cập nhật PKB",Coder,Done,High
+T042,"(Cycle 2) Định nghĩa Resource Mouse và các Component UI cơ bản",Coder,Done,High
+T043,"(Cycle 2) Nâng cấp System `Interact` để xử lý đầu vào chuột thật",Coder,Done,High
+T044,"(Cycle 2) Nâng cấp System `Render` để cung cấp phản hồi trực quan",Coder,Done,Medium
+T045,"(Cycle 2) Viết báo cáo triển khai V9 và cập nhật PKB",Coder,Done,High 
