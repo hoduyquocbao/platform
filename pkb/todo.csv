@@ -113,4 +113,8 @@ T111,"(Cycle 4) Sửa lỗi lifetime E0107 trong struct App",Coder,Open,Critical
 T112,"(Cycle 4) Sửa lỗi range pattern E0029 trong logic input",Coder,Open,Critical
 T113,"(Cycle 4) Dọn dẹp tất cả các cảnh báo (warnings)",Coder,Open,High
 T114,"(Cycle 4) Xác minh build thành công và không còn cảnh báo",Coder,Open,Critical
-T115,"(Cycle 4) Viết báo cáo triển khai V23 và cập nhật PKB",Coder,Open,High 
+T115,"(Cycle 4) Viết báo cáo triển khai V23 và cập nhật PKB",Coder,Open,High
+T116,"(Cycle 4) Định nghĩa và triển khai InputCallback cho minifb",Coder,Open,Critical
+T117,"(Cycle 4) Tích hợp callback vào vòng lặp chính để cập nhật Keyboard Resource",Coder,Open,Critical
+T118,"(Cycle 4) Xác minh chức năng chỉnh sửa văn bản hoạt động trở lại",Coder,Open,High
+T119,"(Cycle 4) Viết báo cáo triển khai V24 và cập nhật PKB",Coder,Open,High 

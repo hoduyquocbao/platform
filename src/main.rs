@@ -22,7 +22,9 @@ use engine::System;
 use components::core::*;
 use components::ui::*;
 use resources::input::mod_rs::Resources;
+use resources::input::Input;
 use minifb::{Key, Window, WindowOptions};
+use std::sync::{Arc, Mutex};
 
 type Entity = usize;
 
@@ -273,6 +275,17 @@ impl App {
     }
 }
 
+// Định nghĩa wrapper để triển khai InputCallback cho Arc<Mutex<Input>>
+pub struct InputCallbackArc {
+    pub inner: Arc<Mutex<Input>>,
+}
+
+impl minifb::InputCallback for InputCallbackArc {
+    fn add_char(&mut self, uni_char: u32) {
+        self.inner.lock().unwrap().add_char(uni_char);
+    }
+}
+
 fn main() {
     let width = 800;
     let height = 600;
@@ -287,15 +300,23 @@ fn main() {
     });
     let mut buffer: Vec<u32> = vec![0; width * height];
     let mut app = App::new();
+    // Tạo input handler và đăng ký callback
+    let input_shared = Arc::new(Mutex::new(Input::new()));
+    let input_for_callback = Arc::clone(&input_shared);
+    window.set_input_callback(Box::new(InputCallbackArc { inner: input_for_callback }));
     while window.is_open() && !window.is_key_down(Key::Escape) {
         // Lấy input chuột
         if let Some((mx, my)) = window.get_mouse_pos(minifb::MouseMode::Discard) {
             app.resources.mouse.position = (mx, my);
         }
         app.resources.mouse.pressed = window.get_mouse_down(minifb::MouseButton::Left);
-        // Lấy input bàn phím (ký tự)
-        // TODO: minifb không hỗ trợ lấy text input trực tiếp, cần custom InputCallback nếu muốn nhận ký tự unicode
-        app.resources.keyboard.chars = String::new();
+        // Lấy input ký tự từ input_shared
+        let chars: String = {
+            let mut input = input_shared.lock().unwrap();
+            let chars: String = input.take_chars().into_iter().collect();
+            chars
+        };
+        app.resources.keyboard.chars = chars;
         // Các phím đặc biệt
         app.resources.keyboard.enter = window.is_key_down(Key::Enter);
         app.resources.keyboard.escape = window.is_key_down(Key::Escape);

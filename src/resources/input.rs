@@ -28,6 +28,38 @@ pub struct Filter {
     pub overdue: bool,
 }
 
+pub struct Input {
+    pub chars: Vec<char>,
+}
+
+unsafe impl Send for Input {}
+unsafe impl Sync for Input {}
+
+impl Input {
+    pub fn new() -> Self {
+        Self { chars: Vec::new() }
+    }
+    pub fn take_chars(&mut self) -> Vec<char> {
+        let chars = self.chars.clone();
+        self.chars.clear();
+        chars
+    }
+}
+
+impl minifb::InputCallback for Input {
+    fn add_char(&mut self, uni_char: u32) {
+        if let Some(character) = std::char::from_u32(uni_char) {
+            self.chars.push(character);
+        }
+    }
+}
+
+impl Default for Input {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 pub mod mod_rs {
     use super::*;
     #[derive(Default)]
