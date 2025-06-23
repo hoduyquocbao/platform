@@ -5,4 +5,9 @@ T003,"Triển khai System 'Toggle' (Mục 3.3.3)",Coder,Done,Medium
 T004,"Triển khai System 'Layout' (phiên bản đơn giản)",Coder,Done,Medium
 T005,"Triển khai System 'Render' (phiên bản giả lập)",Coder,Done,Medium
 T006,"Triển khai System 'Persist' (phiên bản giả lập)",Coder,Done,Medium
-T007,"Viết báo cáo triển khai và cập nhật PKB",Coder,Done,High 
+T007,"Viết báo cáo triển khai và cập nhật PKB",Coder,Done,High
+T008,"Thiết lập cấu trúc App và World trong main.rs",Coder,Done,High
+T009,"Tích hợp các System vào Scheduler theo đúng thứ tự",Coder,Done,High
+T010,"Viết logic khởi tạo (seeding) các Entity ban đầu",Coder,Done,Medium
+T011,"Nâng cấp logic cho các System đại diện",Coder,Done,Medium
+T012,"Viết báo cáo triển khai V2 và cập nhật PKB",Coder,Done,High 
