@@ -1,0 +1,8 @@
+ID,Task,Assignee,Status,Priority
+T001,"Triển khai các Component Cốt lõi (Mục 3.3.1)",Coder,Done,High
+T002,"Triển khai System 'Interact' (Mục 3.3.2)",Coder,Done,High
+T003,"Triển khai System 'Toggle' (Mục 3.3.3)",Coder,Done,Medium
+T004,"Triển khai System 'Layout' (phiên bản đơn giản)",Coder,Done,Medium
+T005,"Triển khai System 'Render' (phiên bản giả lập)",Coder,Done,Medium
+T006,"Triển khai System 'Persist' (phiên bản giả lập)",Coder,Done,Medium
+T007,"Viết báo cáo triển khai và cập nhật PKB",Coder,Done,High 

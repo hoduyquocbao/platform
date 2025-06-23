@@ -1,0 +1,143 @@
+YÊU CẦU TRIỂN KHAI: KHỞI TẠO NỀN TẢNG KIẾN TRÚC V1.0
+
+**NGÀY:** 23-06-2025
+**ID NHIỆM VỤ:** T-250623-01
+
+---
+
+### 1. MỤC TIÊU TỔNG QUAN
+
+Triển khai mã nguồn cho **phiên bản khởi tạo (initial version)** của Nền tảng Ứng dụng Tự trị, dựa trên **Bản thiết kế Kiến trúc Tối hậu** đã được phê duyệt. Mục tiêu của nhiệm vụ này không phải là hoàn thành toàn bộ ứng dụng, mà là **xây dựng bộ khung xương cốt lõi và chứng minh tính khả thi của kiến trúc thông qua việc triển khai các hệ thống đại diện.**
+
+---
+
+### 2. BỐI CẢNH & TRIẾT LÝ (BẮT BUỘC ĐỌC)
+
+Việc triển khai phải tuân thủ nghiêm ngặt các nguyên tắc đã định hình nên kiến trúc này. Mọi quyết định về mã nguồn phải xuất phát từ triết lý dưới đây:
+
+* **Nền tảng ECS là tối cao:** Mọi trạng thái là `Component`, mọi logic là `System`. Không được phép viết logic nghiệp vụ bên trong `Component`.
+* **Định danh Đơn từ là luật:** **KHÔNG NGOẠI LỆ.** Tất cả các `struct`, `enum`, `function`, `variable`, `module`, và `file` do bạn tạo ra phải là **một từ đơn tiếng Anh**. Nếu gặp khó khăn trong việc đặt tên, đó là dấu hiệu cho thấy thiết kế cần được phân rã thêm. Hãy đặt câu hỏi thay vì phá luật.
+* **Hướng dữ liệu (Data-Driven):** Logic của các `System` phải được điều khiển bởi sự tồn tại hoặc giá trị của `Component`, không phải bởi các lời gọi hàm trực tiếp hay các câu lệnh `if/else` phức tạp về trạng thái.
+* **Rõ ràng qua Cấu trúc:** Ưu tiên cấu trúc module rõ ràng hơn là các tên định danh dài dòng.
+
+---
+
+### 3. YÊU CẦU NHIỆM VỤ CHI TIẾT
+
+#### 3.1. Khởi tạo Repository và Cấu trúc Thư mục
+
+1.  Tạo một repository Git mới tên là `platform`.
+2.  Khởi tạo cấu trúc thư mục như sau:
+    ```
+    platform/
+    |-- .gitignore
+    |-- Cargo.toml
+    |-- pkb/
+    |-- src/
+    |   |-- main.rs
+    |   |-- components/
+    |   |-- systems/
+    |   |-- resources/
+    ```
+3.  Thêm file `.gitignore` chuẩn cho Rust.
+4.  Cấu hình `Cargo.toml` với các dependency cần thiết (ví dụ: một framework ECS như `bevy`).
+
+#### 3.2. Khởi tạo Personal Knowledge Base (PKB)
+
+1.  Bên trong thư mục `pkb/`, tạo 3 file sau:
+    * `architecture.csv`: Để định nghĩa các thành phần kiến trúc.
+    * `memories.csv`: Để ghi lại các quyết định, lý do, và các bài học.
+    * `todo.csv`: Để theo dõi các công việc cần làm.
+
+2.  Thêm nội dung khởi tạo cho từng file:
+
+    * **`pkb/architecture.csv`**:
+        ```csv
+        ID,Context,Module,Type,Name,Responsibility,Dependency
+        A001,Core,components,Struct,Text,"Chứa nội dung văn bản của một Entity",
+        A002,Core,systems,System,Persist,"Lưu các Entity có Component 'Dirty' vào bộ nhớ dài hạn",Dirty
+        ```
+
+    * **`pkb/memories.csv`**:
+        ```csv
+        ID,Timestamp,Type,Subject,Decision,Rationale
+        M001,2025-06-23T14:00:00Z,Architectural,Initial Setup,"Khởi tạo dự án với cấu trúc thư mục và PKB theo quy chuẩn của Guardian","Thiết lập nền tảng vững chắc cho việc quản lý tri thức và cấu trúc dự án ngay từ đầu."
+        ```
+
+    * **`pkb/todo.csv`**:
+        ```csv
+        ID,Task,Assignee,Status,Priority
+        T001,"Triển khai các Component Cốt lõi (Mục 3.3.1)",Coder,Open,High
+        T002,"Triển khai System 'Interact' (Mục 3.3.2)",Coder,Open,High
+        T003,"Triển khai System 'Toggle' (Mục 3.3.3)",Coder,Open,Medium
+        T004,"Triển khai System 'Layout' (phiên bản đơn giản)",Coder,Open,Medium
+        T005,"Triển khai System 'Render' (phiên bản giả lập)",Coder,Open,Medium
+        T006,"Triển khai System 'Persist' (phiên bản giả lập)",Coder,Open,Medium
+        T007,"Viết báo cáo triển khai và cập nhật PKB",Coder,Open,High
+        ```
+
+#### 3.3. Triển khai Mã nguồn (Theo từng giai đoạn)
+
+**Yêu cầu:** Mỗi nhóm `Component` hoặc `System` phải được đặt trong một file module riêng. Ví dụ: `src/components/core.rs`, `src/systems/interaction.rs`.
+
+**3.3.1. Giai đoạn 1: Triển khai các Component Cốt lõi**
+* **File:** `src/components/core.rs` (và các file khác nếu cần)
+* **Nhiệm vụ:**
+    * Định nghĩa các `struct` và `enum` cho các `Component` trong nhóm **"Cốt lõi & Trạng thái"** và **"Giao diện - Trạng thái Tương tác"**.
+    * Cụ thể: `Text`, `Status`, `Priority`, `Selected`, `Editing`, `Visible`, `Hover`, `Active`, `Click`, `Dirty`, `Disabled`.
+    * **Tuân thủ nghiêm ngặt quy tắc đặt tên đơn từ.**
+
+**3.3.2 - 3.3.6. Giai đoạn 2: Triển khai các System Đại diện**
+* **Nhiệm vụ:** Viết mã nguồn (dưới dạng giả lập hoặc tích hợp với framework ECS đã chọn) cho các `System` đã được đánh dấu trong `pkb/todo.csv` (từ T002 đến T006).
+* **Tham khảo:** Sử dụng các đoạn mã minh họa trong cuộc thảo luận trước của chúng ta làm kim chỉ nam. Chữ ký hàm và logic phải phản ánh chính xác sự phụ thuộc dữ liệu đã thiết kế.
+* **Ví dụ (cho `src/systems/interaction.rs`):**
+    ```rust
+    // use crate::components::core::*; // ... và các import khác
+    
+    pub fn interact(mut commands: Commands, /* ... các tham số khác ... */) {
+        // Logic của system 'Interact' như đã thiết kế
+    }
+    ```
+
+---
+
+### 4. ĐỊNH DẠNG PHẢN HỒI (BẮT BUỘC)
+
+1.  Sau khi hoàn thành TẤT CẢ các yêu cầu trên, bạn phải tạo một file mới tại đường dẫn gốc của repository: `IMPLEMENTATION_REPORT.md`.
+2.  Nội dung file này phải theo mẫu sau:
+
+    ```markdown
+    # BÁO CÁO TRIỂN KHAI - ID NHIỆM VỤ: T-250623-01
+
+    **Người thực hiện:** Coder
+    **Ngày hoàn thành:** YYYY-MM-DD
+
+    ## 1. Xác nhận Hoàn thành
+    - [x] Đã khởi tạo repository và cấu trúc thư mục.
+    - [x] Đã khởi tạo 3 file PKB với nội dung ban đầu.
+    - [x] Đã triển khai các Component Cốt lõi.
+    - [x] Đã triển khai các System đại diện (`Interact`, `Toggle`, `Layout`, `Render`, `Persist`).
+    - [x] Đã cập nhật trạng thái các công việc trong `pkb/todo.csv` thành `Done`.
+
+    ## 2. Liên kết đến Commit
+    - **Commit Hash:** [Dán hash của commit cuối cùng vào đây]
+
+    ## 3. Các Vấn đề hoặc Câu hỏi (Nếu có)
+    *Ghi lại bất kỳ khó khăn, giả định, hoặc câu hỏi nào bạn có trong quá trình triển khai để Guardian có thể xem xét.*
+    - ...
+
+    ## 4. Xác nhận Cập nhật PKB
+    - [x] `pkb/todo.csv` đã được cập nhật.
+    - [x] `pkb/memories.csv` đã được cập nhật với các quyết định triển khai quan trọng (nếu có).
+    ```
+
+---
+
+### 5. QUY TRÌNH NỘP BÀI
+
+Sau khi đã tạo file `IMPLEMENTATION_REPORT.md` và hoàn tất mọi thứ, hãy thực hiện các lệnh Git sau:
+
+```bash
+git add .
+git commit -m "feat: implement initial platform v1.0 skeleton" -m "Fulfills task T-250623-01. Implemented core components and representative systems. Initialized PKB files and created implementation report."
+git push origin main
