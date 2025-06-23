@@ -47,4 +47,9 @@ T045,"(Cycle 2) Viết báo cáo triển khai V9 và cập nhật PKB",Coder,Don
 T046,"(Cycle 2) Hoàn thiện System `Interact` để tạo sự kiện `Click`",Coder,Done,High
 T047,"(Cycle 2) Tái cấu trúc System `Toggle` để được điều khiển bởi sự kiện `Click`",Coder,Done,High
 T048,"(Cycle 2) Xác minh luồng dữ liệu hoàn chỉnh đến System `Persist`",Coder,Done,Medium
-T049,"(Cycle 2) Viết báo cáo triển khai V10 và cập nhật PKB",Coder,Done,High 
+T049,"(Cycle 2) Viết báo cáo triển khai V10 và cập nhật PKB",Coder,Done,High
+T050,"(Cycle 2) Nâng cấp System `Layout` để sắp xếp Entity theo chiều dọc",Coder,Done,High
+T051,"(Cycle 2) Triển khai cơ chế vào/ra 'Chế độ Chỉnh sửa' (Editing Mode)",Coder,Done,High
+T052,"(Cycle 2) Tạo System `Text` để xử lý đầu vào văn bản khi đang chỉnh sửa",Coder,Done,High
+T053,"(Cycle 2) Nâng cấp System `Render` để hiển thị bố cục và trạng thái chỉnh sửa",Coder,Done,Medium
+T054,"(Cycle 2) Viết báo cáo triển khai V11 và cập nhật PKB",Coder,Done,High 
