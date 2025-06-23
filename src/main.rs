@@ -171,13 +171,13 @@ impl App {
 
     fn initialize(&mut self) {
         use systems::{
-            command::{CreateSystem, DeleteSystem}, interaction::Interact, layout::Layout, persist::Persist,
+            command::{Create, Delete}, interaction::Interact, layout::Layout, persist::Persist,
             render::Render, text::TextSystem, toggle::Toggle,
         };
         self.scheduler.add(Box::new(Interact));
         self.scheduler.add(Box::new(Layout));
-        self.scheduler.add(Box::new(CreateSystem));
-        self.scheduler.add(Box::new(DeleteSystem));
+        self.scheduler.add(Box::new(Create));
+        self.scheduler.add(Box::new(Delete));
         self.scheduler.add(Box::new(Render));
         self.scheduler.add(Box::new(Persist));
         self.scheduler.add(Box::new(Toggle));

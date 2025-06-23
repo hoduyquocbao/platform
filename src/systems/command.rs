@@ -4,9 +4,9 @@ use crate::engine::System;
 use crate::resources::input::mod_rs::Resources;
 
 /// Hệ thống xử lý lệnh tạo task mới dựa trên component Create.
-pub struct CreateSystem;
+pub struct Create;
 
-impl System for CreateSystem {
+impl System for Create {
     /// Thực thi tạo task mới cho mỗi entity có component Create.
     fn run(&mut self, world: &mut World, _resources: &mut Resources) {
         for id in 0..world.entity_count {
@@ -32,9 +32,9 @@ impl System for CreateSystem {
 }
 
 /// Hệ thống xử lý lệnh xóa task dựa trên component Delete.
-pub struct DeleteSystem;
+pub struct Delete;
 
-impl System for DeleteSystem {
+impl System for Delete {
     /// Thực thi xóa entity cho mỗi entity có component Delete.
     fn run(&mut self, world: &mut World, _resources: &mut Resources) {
         for id in 0..world.entity_count {
