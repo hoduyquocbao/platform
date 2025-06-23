@@ -186,18 +186,18 @@ pub struct App {
 }
 
 impl App {
-    pub fn new() -> Self {
+    pub fn new() -> Result<Self, Error> {
         let mut app = Self {
             world: World::new(),
             scheduler: Scheduler::new(),
             resources: Resources::default(),
         };
         // Load font
-        let font_bytes = std::fs::read("assets/Roboto-Regular.ttf").expect("Font file not found");
-        let font = fontdue::Font::from_bytes(font_bytes, fontdue::FontSettings::default()).expect("Invalid font data");
+        let font_bytes = std::fs::read("assets/Roboto-Regular.ttf").map_err(|_| Error::FontLoad)?;
+        let font = fontdue::Font::from_bytes(font_bytes, fontdue::FontSettings::default()).map_err(|_| Error::FontLoad)?;
         app.resources.font = Some(FontResource(font));
         app.initialize();
-        app
+        Ok(app)
     }
 
     fn initialize(&mut self) {
@@ -292,6 +292,12 @@ impl minifb::InputCallback for InputCallbackArc {
     }
 }
 
+#[derive(Debug)]
+pub enum Error {
+    FontLoad,
+    // ... các loại lỗi khác trong tương lai
+}
+
 fn main() {
     let width = 800;
     let height = 600;
@@ -305,7 +311,13 @@ fn main() {
         panic!("Unable to open window: {}", e);
     });
     let mut buffer: Vec<u32> = vec![0; width * height];
-    let mut app = App::new();
+    let mut app = match App::new() {
+        Ok(app) => app,
+        Err(e) => {
+            eprintln!("Lỗi khởi tạo ứng dụng: {:?}", e);
+            std::process::exit(1);
+        }
+    };
     // Tạo input handler và đăng ký callback
     let input_shared = Arc::new(Mutex::new(Input::new()));
     let input_for_callback = Arc::clone(&input_shared);

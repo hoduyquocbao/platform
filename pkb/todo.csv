@@ -122,4 +122,9 @@ T120,"(Cycle 4) Lựa chọn và tích hợp thư viện xử lý font",Coder,Op
 T121,"(Cycle 4) Tạo Resource để quản lý dữ liệu font",Coder,Open,High
 T122,"(Cycle 4) Nâng cấp System `Render` để vẽ văn bản lên framebuffer",Coder,Open,Critical
 T123,"(Cycle 4) Viết kịch bản kiểm thử để xác minh văn bản hiển thị và cập nhật đúng",Coder,Open,High
-T124,"(Cycle 4) Viết báo cáo triển khai V25 và cập nhật PKB",Coder,Open,High 
+T124,"(Cycle 4) Viết báo cáo triển khai V25 và cập nhật PKB",Coder,Open,High
+T125,"(Cycle 4) Định nghĩa enum Error tùy chỉnh cho ứng dụng",Coder,Open,Critical
+T126,"(Cycle 4) Tái cấu trúc logic tải font để trả về Result, loại bỏ panic",Coder,Open,Critical
+T127,"(Cycle 4) Xử lý Result trong hàm main để thoát an toàn hoặc phục hồi mềm",Coder,Open,Critical
+T128,"(Cycle 4) Xác minh ứng dụng không còn panic khi file font bị lỗi/thiếu",Coder,Open,High
+T129,"(Cycle 4) Viết báo cáo triển khai V26 và cập nhật PKB",Coder,Open,High 
