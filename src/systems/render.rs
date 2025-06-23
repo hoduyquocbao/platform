@@ -20,6 +20,42 @@ fn color_to_u32(color: &str) -> u32 {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
+fn blit_glyph(
+    framebuffer: &mut [u32],
+    width: usize,
+    height: usize,
+    x: usize,
+    y: usize,
+    bitmap: &[u8],
+    glyph_w: usize,
+    glyph_h: usize,
+    color: u32,
+) {
+    for row in 0..glyph_h {
+        for col in 0..glyph_w {
+            let alpha = bitmap[row * glyph_w + col] as f32 / 255.0;
+            let px = x + col;
+            let py = y + row;
+            if px < width && py < height {
+                let idx = py * width + px;
+                let bg = framebuffer[idx];
+                // Simple alpha blend
+                let r = ((color >> 16) & 0xFF) as f32;
+                let g = ((color >> 8) & 0xFF) as f32;
+                let b = (color & 0xFF) as f32;
+                let br = ((bg >> 16) & 0xFF) as f32;
+                let bg_ = ((bg >> 8) & 0xFF) as f32;
+                let bb = (bg & 0xFF) as f32;
+                let nr = (r * alpha + br * (1.0 - alpha)) as u32;
+                let ng = (g * alpha + bg_ * (1.0 - alpha)) as u32;
+                let nb = (b * alpha + bb * (1.0 - alpha)) as u32;
+                framebuffer[idx] = (0xFF << 24) | (nr << 16) | (ng << 8) | nb;
+            }
+        }
+    }
+}
+
 impl System for Render {
     /// Render toàn bộ entity Visible ra UI, vẽ hình chữ nhật màu sắc lên framebuffer.
     fn run(&mut self, world: &mut World, resources: &mut Resources) {
@@ -31,6 +67,10 @@ impl System for Render {
         for px in framebuffer.iter_mut() {
             *px = 0xFF222222;
         }
+        let font = match &resources.font {
+            Some(f) => &f.0,
+            None => return,
+        };
         for id in 0..world.entity_count {
             if world.visibles[id].is_some()
                 && world.bounds[id].is_some()
@@ -52,6 +92,29 @@ impl System for Render {
                 for y in y0..(y0 + h).min(height) {
                     for x in x0..(x0 + w).min(width) {
                         framebuffer[y * width + x] = color;
+                    }
+                }
+                // Vẽ text nếu có
+                if let Some(text) = world.texts[id].as_ref() {
+                    let text_color = 0xFFFFFFFF;
+                    let mut cursor_x = x0 + 8;
+                    let baseline = y0 + h / 2;
+                    let font_size = (h as f32 * 0.5).max(12.0);
+                    for ch in text.value.chars() {
+                        let (metrics, bitmap) = font.rasterize(ch, font_size);
+                        let glyph_y = baseline.saturating_sub(metrics.height / 2);
+                        blit_glyph(
+                            framebuffer,
+                            width,
+                            height,
+                            cursor_x,
+                            glyph_y,
+                            &bitmap,
+                            metrics.width,
+                            metrics.height,
+                            text_color,
+                        );
+                        cursor_x += metrics.advance_width as usize;
                     }
                 }
             }

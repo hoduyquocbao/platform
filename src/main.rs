@@ -5,6 +5,7 @@ mod components {
 }
 mod resources {
     pub mod input;
+    pub mod font;
 }
 mod systems {
     pub mod command;
@@ -23,6 +24,7 @@ use components::core::*;
 use components::ui::*;
 use resources::input::mod_rs::Resources;
 use resources::input::Input;
+use resources::font::FontResource;
 use minifb::{Key, Window, WindowOptions};
 use std::sync::{Arc, Mutex};
 
@@ -190,6 +192,10 @@ impl App {
             scheduler: Scheduler::new(),
             resources: Resources::default(),
         };
+        // Load font
+        let font_bytes = std::fs::read("assets/Roboto-Regular.ttf").expect("Font file not found");
+        let font = fontdue::Font::from_bytes(font_bytes, fontdue::FontSettings::default()).expect("Invalid font data");
+        app.resources.font = Some(FontResource(font));
         app.initialize();
         app
     }

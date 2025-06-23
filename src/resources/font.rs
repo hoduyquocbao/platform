@@ -1,0 +1,1 @@
+pub struct FontResource(pub fontdue::Font); 

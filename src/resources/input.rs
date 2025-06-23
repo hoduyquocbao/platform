@@ -1,4 +1,5 @@
 use crate::components::core::Status;
+use crate::resources::font::FontResource;
 
 #[derive(Default)]
 pub struct Mouse {
@@ -69,5 +70,6 @@ pub mod mod_rs {
         pub time: Time,
         pub filter: Filter,
         pub framebuffer: Option<(*mut u32, usize, usize)>,
+        pub font: Option<FontResource>,
     }
 }
