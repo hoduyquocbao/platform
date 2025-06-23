@@ -83,4 +83,8 @@ T081,"(Cycle 3) Định nghĩa Component trạng thái `Collapsed`",Coder,Done,H
 T082,"(Cycle 3) Nâng cấp System `Interact` để xử lý sự kiện Mở/Đóng",Coder,Done,High
 T083,"(Cycle 3) Nâng cấp System `Layout` để ẩn các con của node bị đóng",Coder,Done,Medium
 T084,"(Cycle 3) Nâng cấp System `Render` để hiển thị biểu tượng Mở/Đóng",Coder,Done,Medium
-T085,"(Cycle 3) Viết báo cáo triển khai V17 và cập nhật PKB",Coder,Done,High 
+T085,"(Cycle 3) Viết báo cáo triển khai V17 và cập nhật PKB",Coder,Done,High
+T086,"(Cycle 3) Phân tích và thiết kế logic xóa theo tầng",Coder,Done,Critical
+T087,"(Cycle 3) Nâng cấp System `Delete` để thực hiện xóa theo tầng",Coder,Done,Critical
+T088,"(Cycle 3) Viết kịch bản kiểm thử để xác minh logic xóa",Coder,Done,High
+T089,"(Cycle 3) Viết báo cáo triển khai V18 và cập nhật PKB",Coder,Done,High 
