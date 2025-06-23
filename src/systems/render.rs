@@ -6,86 +6,56 @@ use crate::resources::input::mod_rs::Resources;
 /// System chịu trách nhiệm render (hiển thị) toàn bộ entity ra UI, bao gồm trạng thái, style, due date, filter.
 pub struct Render;
 
+fn color_to_u32(color: &str) -> u32 {
+    match color {
+        "blue" => 0xFF2196F3,
+        "green" => 0xFF4CAF50,
+        "red" => 0xFFF44336,
+        "gray" => 0xFFBDBDBD,
+        "yellow" => 0xFFFFEB3B,
+        "orange" => 0xFFFF9800,
+        "purple" => 0xFF9C27B0,
+        "black" => 0xFF000000,
+        "white" => 0xFFFFFFFF,
+        _ => 0xFF757575,
+    }
+}
+
 impl System for Render {
-    /// Render toàn bộ entity Visible ra UI, hiển thị trạng thái, style, due date, filter.
+    /// Render toàn bộ entity Visible ra UI, vẽ hình chữ nhật màu sắc lên framebuffer.
     fn run(&mut self, world: &mut World, resources: &mut Resources) {
-        let now = resources.time.now;
-        println!("--- FRAME START ---");
+        let (framebuffer, width, height) = match resources.framebuffer {
+            Some((ptr, w, h)) => unsafe { (std::slice::from_raw_parts_mut(ptr, w * h), w, h) },
+            None => return,
+        };
+        // Clear background
+        for px in framebuffer.iter_mut() {
+            *px = 0xFF222222;
+        }
         for id in 0..world.entity_count {
             if world.visibles[id].is_some()
-                && world.texts[id].is_some()
                 && world.bounds[id].is_some()
+                && world.styles[id].is_some()
             {
-                let text = world.texts[id]
-                    .as_ref()
-                    .map(|t| t.object().value.as_str())
-                    .unwrap_or("");
                 let bounds = world.bounds[id].as_ref().unwrap();
-                let status = if let Some(s) = world.statuses[id].as_ref() {
-                    s.object();
-                    "[TODO]"
-                } else {
-                    "[DONE]"
-                };
-                let mut style = world.styles[id].as_ref().map(|s| s.color).unwrap_or("");
-                let mut prefix = " ";
-                if world.editings[id].is_some() {
-                    prefix = "[EDITING]";
-                } else if world.selecteds[id].is_some() {
-                    prefix = "*";
+                let style = world.styles[id].as_ref().unwrap();
+                let mut color = color_to_u32(style.color);
+                // Highlight nếu selected/hover
+                if world.selecteds[id].is_some() {
+                    color = 0xFF1976D2; // darker blue
                 } else if world.hovers[id].is_some() {
-                    prefix = ">";
+                    color = 0xFF90CAF9; // light blue
                 }
-                let mut icon = "";
-                if world.childrens[id].is_some() {
-                    if world.collapseds[id].is_some() {
-                        icon = "[+]";
-                    } else {
-                        icon = "[-]";
+                let x0 = bounds.x as usize;
+                let y0 = bounds.y as usize;
+                let w = bounds.width as usize;
+                let h = bounds.height as usize;
+                for y in y0..(y0 + h).min(height) {
+                    for x in x0..(x0 + w).min(width) {
+                        framebuffer[y * width + x] = color;
                     }
                 }
-                let mut display_text = text.to_string();
-                if world.editings[id].is_some() {
-                    display_text.push('|');
-                }
-                let mut due_str = String::new();
-                if let Some(due) = world.dues[id].as_ref() {
-                    due_str = format!(" [Due: {}]", due.0);
-                    if due.0 < now && world.statuses[id].is_some() {
-                        style = "red";
-                    }
-                }
-                let indent = (bounds.x / 8.0) as usize;
-                let indent_str = "  ".repeat(indent);
-                println!(
-                    "{}{}{} {} ({}, {}) {}{} {} {}",
-                    indent_str,
-                    icon,
-                    prefix,
-                    status,
-                    bounds.x,
-                    bounds.y,
-                    display_text,
-                    due_str,
-                    style,
-                    id
-                );
             }
         }
-        let filter = &resources.filter;
-        let mut filter_str = String::from("FILTERING:");
-        if let Some(ref t) = filter.text {
-            filter_str.push_str(&format!(" text=\"{}\"", t));
-        }
-        if filter.status.is_some() {
-            filter_str.push_str(" status=TODO");
-        }
-        if filter.overdue {
-            filter_str.push_str(" overdue=true");
-        }
-        if filter_str == "FILTERING:" {
-            filter_str.push_str(" (none)");
-        }
-        println!("{}", filter_str);
     }
 }

@@ -103,4 +103,9 @@ T101,"(Cycle 3) Chạy phân tích tĩnh (clippy, fmt) và sửa tất cả cả
 T102,"(Cycle 3) Rà soát và tái cấu trúc các system của Cycle 3 (đặc biệt là Interact)",Coder,Open,Critical
 T103,"(Cycle 3) Đảm bảo tất cả code mới của Cycle 3 đều có bình luận rõ ràng",Coder,Open,Medium
 T104,"(Cycle 3) Xác minh codebase đạt trạng thái 'zero-warning'",Coder,Open,High
-T105,"(Cycle 3) Viết báo cáo triển khai V21 và cập nhật PKB",Coder,Open,High 
+T105,"(Cycle 3) Viết báo cáo triển khai V21 và cập nhật PKB",Coder,Open,High
+T106,"(Cycle 4) Lựa chọn và tích hợp thư viện đồ họa 2D tối giản",Coder,Open,Critical
+T107,"(Cycle 4) Cập nhật vòng lặp chính để quản lý cửa sổ đồ họa",Coder,Open,Critical
+T108,"(Cycle 4) Nâng cấp System `Interact` để nhận sự kiện từ cửa sổ",Coder,Open,High
+T109,"(Cycle 4) Tái cấu trúc System `Render` để vẽ hình khối cơ bản",Coder,Open,High
+T110,"(Cycle 4) Viết báo cáo triển khai V22 và cập nhật PKB",Coder,Open,High 

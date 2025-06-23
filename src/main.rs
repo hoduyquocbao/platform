@@ -22,6 +22,7 @@ use engine::System;
 use components::core::*;
 use components::ui::*;
 use resources::input::mod_rs::Resources;
+use minifb::{Key, Window, WindowOptions};
 
 type Entity = usize;
 
@@ -174,13 +175,13 @@ impl Scheduler {
 
 /// Ứng dụng chính, chứa World, Scheduler và Resources.
 #[derive(Default)]
-pub struct App {
+pub struct App<'a> {
     world: World,
     scheduler: Scheduler,
-    resources: Resources,
+    resources: Resources<'a>,
 }
 
-impl App {
+impl<'a> App<'a> {
     pub fn new() -> Self {
         let mut app = Self {
             world: World::new(),
@@ -259,6 +260,13 @@ impl App {
         self.world.styles[e2] = Some(Style { color: "red" });
     }
 
+    pub fn run_with_framebuffer(&mut self, framebuffer: &mut [u32], width: usize, height: usize) {
+        self.resources.time.now += 1;
+        self.resources.framebuffer = Some((framebuffer.as_mut_ptr(), width, height));
+        self.scheduler.run(&mut self.world, &mut self.resources);
+        self.resources.framebuffer = None;
+    }
+
     pub fn run(&mut self) {
         self.resources.time.now += 1;
         self.scheduler.run(&mut self.world, &mut self.resources);
@@ -266,9 +274,36 @@ impl App {
 }
 
 fn main() {
+    let width = 800;
+    let height = 600;
+    let mut window = Window::new(
+        "ECS Platform - Cycle 4",
+        width,
+        height,
+        WindowOptions::default(),
+    )
+    .unwrap_or_else(|e| {
+        panic!("Unable to open window: {}", e);
+    });
+    let mut buffer: Vec<u32> = vec![0; width * height];
     let mut app = App::new();
-    for _ in 0..3 {
-        app.run();
-        std::thread::sleep(std::time::Duration::from_millis(16));
+    while window.is_open() && !window.is_key_down(Key::Escape) {
+        // Lấy input chuột
+        if let Some((mx, my)) = window.get_mouse_pos(minifb::MouseMode::Discard) {
+            app.resources.mouse.position = (mx, my);
+        }
+        app.resources.mouse.pressed = window.get_mouse_down(minifb::MouseButton::Left);
+        // Lấy input bàn phím (chỉ lấy ký tự, Enter, Escape, Backspace, E)
+        app.resources.keyboard.key = window.get_keys_pressed(minifb::KeyRepeat::No).iter().find_map(|k| match k {
+            Key::A..=Key::Z => Some(((*k as u8) as char).to_ascii_lowercase()),
+            Key::Space => Some(' '),
+            _ => None,
+        });
+        app.resources.keyboard.enter = window.is_key_down(Key::Enter);
+        app.resources.keyboard.escape = window.is_key_down(Key::Escape);
+        app.resources.keyboard.backspace = window.is_key_down(Key::Backspace);
+        app.resources.keyboard.e = window.is_key_down(Key::E);
+        app.run_with_framebuffer(&mut buffer, width, height);
+        window.update_with_buffer(&buffer, width, height).unwrap();
     }
 }

@@ -35,5 +35,6 @@ pub mod mod_rs {
         pub keyboard: Keyboard,
         pub time: Time,
         pub filter: Filter,
+        pub framebuffer: Option<(*mut u32, usize, usize)>,
     }
 }
