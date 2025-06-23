@@ -52,4 +52,10 @@ T050,"(Cycle 2) Nâng cấp System `Layout` để sắp xếp Entity theo chiề
 T051,"(Cycle 2) Triển khai cơ chế vào/ra 'Chế độ Chỉnh sửa' (Editing Mode)",Coder,Done,High
 T052,"(Cycle 2) Tạo System `Text` để xử lý đầu vào văn bản khi đang chỉnh sửa",Coder,Done,High
 T053,"(Cycle 2) Nâng cấp System `Render` để hiển thị bố cục và trạng thái chỉnh sửa",Coder,Done,Medium
-T054,"(Cycle 2) Viết báo cáo triển khai V11 và cập nhật PKB",Coder,Done,High 
+T054,"(Cycle 2) Viết báo cáo triển khai V11 và cập nhật PKB",Coder,Done,High
+T055,"(Refactor) Định nghĩa System Trait và Resource Container",Coder,Open,Critical
+T056,"(Refactor) Chuyển đổi tất cả các system hiện tại thành các struct rỗng",Coder,Open,Critical
+T057,"(Refactor) Triển khai System Trait cho tất cả các struct system",Coder,Open,Critical
+T058,"(Refactor) Nâng cấp Scheduler để thực thi các Box<dyn System>",Coder,Open,Critical
+T059,"(Refactor) Cập nhật main.rs và xác minh build thành công",Coder,Open,Critical
+T060,"(Refactor) Viết báo cáo triển khai V12 và cập nhật PKB",Coder,Open,High 

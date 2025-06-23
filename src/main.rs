@@ -12,12 +12,14 @@ mod systems {
     pub mod render;
     pub mod persist;
     pub mod command;
+    pub mod text;
 }
+mod engine;
+use engine::System;
 
 use components::core::*;
 use components::ui::*;
-use resources::input::*;
-use systems::*;
+use resources::input::mod_rs::Resources;
 
 type Entity = usize;
 
@@ -126,19 +128,19 @@ impl World {
 
 #[derive(Default)]
 pub struct Scheduler {
-    systems: Vec<fn(&mut World, &crate::resources::input::Mouse)>,
+    systems: Vec<Box<dyn System>>,
 }
 
 impl Scheduler {
     pub fn new() -> Self {
         Self { systems: Vec::new() }
     }
-    pub fn add(&mut self, system: fn(&mut World, &crate::resources::input::Mouse)) {
+    pub fn add(&mut self, system: Box<dyn System>) {
         self.systems.push(system);
     }
-    pub fn run(&self, world: &mut World, mouse: &crate::resources::input::Mouse) {
-        for system in &self.systems {
-            system(world, mouse);
+    pub fn run(&mut self, world: &mut World, resources: &mut Resources) {
+        for system in self.systems.iter_mut() {
+            system.run(world, resources);
         }
     }
 }
@@ -147,7 +149,7 @@ impl Scheduler {
 pub struct App {
     world: World,
     scheduler: Scheduler,
-    mouse: crate::resources::input::Mouse,
+    resources: Resources,
 }
 
 impl App {
@@ -155,19 +157,21 @@ impl App {
         let mut app = Self {
             world: World::new(),
             scheduler: Scheduler::new(),
-            mouse: Mouse { position: (0.0, 0.0), pressed: false },
+            resources: Resources::default(),
         };
         app.initialize();
         app
     }
 
     fn initialize(&mut self) {
-        self.scheduler.add(interaction::interact);
-        self.scheduler.add(layout::layout);
-        self.scheduler.add(command::process);
-        self.scheduler.add(render::render);
-        self.scheduler.add(persist::persist);
-        self.scheduler.add(toggle::toggle);
+        use systems::{interaction::Interact, layout::Layout, command::Command, render::Render, persist::Persist, toggle::Toggle, text::TextSystem};
+        self.scheduler.add(Box::new(Interact));
+        self.scheduler.add(Box::new(Layout));
+        self.scheduler.add(Box::new(Command));
+        self.scheduler.add(Box::new(Render));
+        self.scheduler.add(Box::new(Persist));
+        self.scheduler.add(Box::new(Toggle));
+        self.scheduler.add(Box::new(TextSystem));
         // Khởi tạo entity mẫu với Bounds và Style
         let e0 = self.world.spawn();
         self.world.texts[e0] = Some(Text { value: "Task 1".to_string() });
@@ -196,32 +200,12 @@ impl App {
     }
 
     pub fn run(&mut self) {
-        // Giả lập input tập trung: frame 1 nhấn 'n', frame 2 nhấn 'd', frame 3 không nhấn gì
-        static mut FRAME: usize = 0;
-        unsafe {
-            FRAME += 1;
-            match FRAME {
-                1 => {
-                    let e = self.world.spawn();
-                    self.world.creates[e] = Some(Create);
-                },
-                2 => {
-                    for id in 0..self.world.entity_count {
-                        if self.world.selecteds[id].is_some() {
-                            self.world.deletes[id] = Some(Delete);
-                        }
-                    }
-                },
-                _ => {}
-            }
-        }
-        self.scheduler.run(&mut self.world, &self.mouse);
+        self.scheduler.run(&mut self.world, &mut self.resources);
     }
 }
 
 fn main() {
     let mut app = App::new();
-    // Vòng lặp ứng dụng chính
     for _ in 0..3 {
         app.run();
         std::thread::sleep(std::time::Duration::from_millis(16));

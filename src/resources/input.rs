@@ -11,4 +11,13 @@ pub struct Keyboard {
     pub escape: bool,
     pub backspace: bool,
     pub e: bool,
+}
+
+pub mod mod_rs {
+    use super::*;
+    #[derive(Default)]
+    pub struct Resources {
+        pub mouse: Mouse,
+        pub keyboard: Keyboard,
+    }
 } 
