@@ -15,4 +15,8 @@ T013,"Tái cấu trúc World và Entity theo mô hình ECS thực thụ",Coder,D
 T014,"Nâng cấp Scheduler và các System để hỗ trợ truy vấn dữ liệu",Coder,Done,High
 T015,"Triển khai logic truy vấn cho System `Render`",Coder,Done,Medium
 T016,"Triển khai luồng tương tác hoàn chỉnh cho `Input` và `Toggle`",Coder,Done,High
-T017,"Viết báo cáo triển khai V3 và cập nhật PKB",Coder,Done,High 
+T017,"Viết báo cáo triển khai V3 và cập nhật PKB",Coder,Done,High
+T018,"Định nghĩa Resource Mouse và các Component UI cơ bản",Coder,Done,High
+T019,"Nâng cấp System `Interact` để xử lý đầu vào chuột thật",Coder,Done,High
+T020,"Nâng cấp System `Render` để cung cấp phản hồi trực quan",Coder,Done,Medium
+T021,"Viết báo cáo triển khai V4 và cập nhật PKB",Coder,Done,High 
