@@ -1,9 +1,6 @@
-use crate::components::core::*;
-use crate::components::ui::*;
 use crate::World;
-use crate::resources::input::*;
 
-pub fn layout(world: &mut World, _mouse: &Mouse) {
+pub fn layout(world: &mut World, _mouse: &crate::resources::input::Mouse) {
     let mut y = 0.0;
     let spacing = 40.0;
     for id in 0..world.entity_count {

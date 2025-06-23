@@ -7,7 +7,7 @@ pub fn process(world: &mut World, _mouse: &Mouse) {
     // Xử lý Create
     let mut create_ids = vec![];
     for id in 0..world.entity_count {
-        if let Some(_) = world.creates.get(id).and_then(|c| c.as_ref()) {
+        if world.creates.get(id).is_some_and(|c| c.is_some()) {
             create_ids.push(id);
         }
     }
@@ -27,7 +27,7 @@ pub fn process(world: &mut World, _mouse: &Mouse) {
     // Xử lý Delete
     let mut delete_ids = vec![];
     for id in 0..world.entity_count {
-        if let Some(_) = world.deletes.get(id).and_then(|d| d.as_ref()) {
+        if world.deletes.get(id).is_some_and(|d| d.is_some()) {
             delete_ids.push(id);
         }
     }

@@ -11,8 +11,6 @@ mod systems {
     pub mod layout;
     pub mod render;
     pub mod persist;
-    pub mod edit;
-    pub mod text;
     pub mod command;
 }
 
@@ -20,13 +18,10 @@ use components::core::*;
 use components::ui::*;
 use resources::input::*;
 use systems::*;
-use components::ui::Hover as UiHover;
-
-use systems::edit::{Keyboard, Key};
-use systems::command;
 
 type Entity = usize;
 
+#[derive(Default)]
 pub struct World {
     pub texts: Vec<Option<Text>>,
     pub statuses: Vec<Option<Status>>,
@@ -34,7 +29,7 @@ pub struct World {
     pub selecteds: Vec<Option<Selected>>,
     pub editings: Vec<Option<Editing>>,
     pub visibles: Vec<Option<Visible>>,
-    pub hovers: Vec<Option<UiHover>>,
+    pub hovers: Vec<Option<Hover>>,
     pub actives: Vec<Option<Active>>,
     pub clicks: Vec<Option<Click>>,
     pub dirties: Vec<Option<Dirty>>,
@@ -129,29 +124,30 @@ impl World {
     }
 }
 
+#[derive(Default)]
 pub struct Scheduler {
-    systems: Vec<fn(&mut World, &Mouse)>,
+    systems: Vec<fn(&mut World, &crate::resources::input::Mouse)>,
 }
 
 impl Scheduler {
     pub fn new() -> Self {
         Self { systems: Vec::new() }
     }
-    pub fn add(&mut self, system: fn(&mut World, &Mouse)) {
+    pub fn add(&mut self, system: fn(&mut World, &crate::resources::input::Mouse)) {
         self.systems.push(system);
     }
-    pub fn run(&self, world: &mut World, mouse: &Mouse) {
+    pub fn run(&self, world: &mut World, mouse: &crate::resources::input::Mouse) {
         for system in &self.systems {
             system(world, mouse);
         }
     }
 }
 
+#[derive(Default)]
 pub struct App {
     world: World,
     scheduler: Scheduler,
-    mouse: Mouse,
-    keyboard: Keyboard,
+    mouse: crate::resources::input::Mouse,
 }
 
 impl App {
@@ -160,7 +156,6 @@ impl App {
             world: World::new(),
             scheduler: Scheduler::new(),
             mouse: Mouse { position: (0.0, 0.0), pressed: false },
-            keyboard: Keyboard { key: None },
         };
         app.initialize();
         app

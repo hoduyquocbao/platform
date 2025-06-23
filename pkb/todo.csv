@@ -34,4 +34,9 @@ T032,"Triển khai cơ chế tạo Task mới dựa trên Command",Coder,Done,Hi
 T033,"Triển khai cơ chế xóa Task đang chọn dựa trên Command",Coder,Done,High
 T034,"Tái cấu trúc và tập trung hóa logic xử lý đầu vào bàn phím",Coder,Done,Medium
 T035,"Đảm bảo System `Layout` được cập nhật sau khi tạo/xóa Task",Coder,Done,Medium
-T036,"Viết báo cáo triển khai V7 và cập nhật PKB",Coder,Done,High 
+T036,"Viết báo cáo triển khai V7 và cập nhật PKB",Coder,Done,High
+T037,"Phân tích và loại bỏ các module và component không sử dụng",Coder,Done,High
+T038,"Sửa tất cả các cảnh báo về style và idiom từ cargo clippy",Coder,Done,Medium
+T039,"Triển khai Default trait cho các struct chính theo gợi ý",Coder,Done,Medium
+T040,"Xác minh codebase đạt trạng thái 'zero-warning' với cargo clippy",Coder,Done,High
+T041,"Viết báo cáo triển khai V8 và cập nhật PKB",Coder,Done,High 

@@ -5,8 +5,8 @@ pub struct Bounds {
     pub height: f32,
 }
 
-pub struct Hover;
-pub use Hover as UiHover;
+// pub struct Hover;
+// pub use Hover as UiHover;
 
 pub struct Style {
     pub color: &'static str,

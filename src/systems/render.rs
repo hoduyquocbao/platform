@@ -1,9 +1,6 @@
-use crate::components::core::*;
-use crate::components::ui::*;
 use crate::World;
-use crate::resources::input::*;
 
-pub fn render(world: &mut World, _mouse: &Mouse) {
+pub fn render(world: &mut World, _mouse: &crate::resources::input::Mouse) {
     println!("--- FRAME START ---");
     for id in 0..world.entity_count {
         if world.visibles[id].is_some() && world.texts[id].is_some() && world.statuses[id].is_some() && world.styles[id].is_some() && world.bounds[id].is_some() {

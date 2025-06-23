@@ -1,0 +1,194 @@
+    Checking platform v0.1.0 (/Users/hdqb/codes/frameworks/platform)
+warning: unused import: `crate::components::core::*`
+ --> src/systems/layout.rs:1:5
+  |
+1 | use crate::components::core::*;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `crate::components::ui::*`
+ --> src/systems/layout.rs:2:5
+  |
+2 | use crate::components::ui::*;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::components::core::*`
+ --> src/systems/render.rs:1:5
+  |
+1 | use crate::components::core::*;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::components::ui::*`
+ --> src/systems/render.rs:2:5
+  |
+2 | use crate::components::ui::*;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::components::core::*`
+ --> src/systems/persist.rs:1:5
+  |
+1 | use crate::components::core::*;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: this `if` statement can be collapsed
+  --> src/systems/edit.rs:24:9
+   |
+24 | /         if world.editings[id].is_some() {
+25 | |             if keyboard.key == Some(Key::Enter) || keyboard.key == Some(Key::Escape) {
+26 | |                 world.editings[id] = None;
+27 | |                 if keyboard.key == Some(Key::Enter) {
+...  |
+31 | |         }
+   | |_________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#collapsible_if
+   = note: `#[warn(clippy::collapsible_if)]` on by default
+help: collapse nested if block
+   |
+24 ~         if world.editings[id].is_some() && (keyboard.key == Some(Key::Enter) || keyboard.key == Some(Key::Escape)) {
+25 +             world.editings[id] = None;
+26 +             if keyboard.key == Some(Key::Enter) {
+27 +                 world.dirties[id] = Some(Dirty);
+28 +             }
+29 +         }
+   |
+
+warning: unused import: `crate::components::core::*`
+ --> src/systems/text.rs:1:5
+  |
+1 | use crate::components::core::*;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Key`
+  --> src/main.rs:24:31
+   |
+24 | use systems::edit::{Keyboard, Key};
+   |                               ^^^
+
+warning: field `keyboard` is never read
+   --> src/main.rs:153:5
+    |
+149 | pub struct App {
+    |            --- field in this struct
+...
+153 |     keyboard: Keyboard,
+    |     ^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: variants `E`, `Enter`, `Escape`, and `Char` are never constructed
+  --> src/systems/edit.rs:7:5
+   |
+6  | pub enum Key {
+   |          --- variants in this enum
+7  |     E,
+   |     ^
+8  |     Enter,
+   |     ^^^^^
+9  |     Escape,
+   |     ^^^^^^
+10 |     Char(char),
+   |     ^^^^
+
+warning: field `key` is never read
+  --> src/systems/edit.rs:14:9
+   |
+13 | pub struct Keyboard {
+   |            -------- field in this struct
+14 |     pub key: Option<Key>,
+   |         ^^^
+
+warning: function `edit` is never used
+  --> src/systems/edit.rs:17:8
+   |
+17 | pub fn edit(world: &mut World, keyboard: &Keyboard) {
+   |        ^^^^
+
+warning: function `text` is never used
+ --> src/systems/text.rs:5:8
+  |
+5 | pub fn text(world: &mut World, keyboard: &Keyboard) {
+  |        ^^^^
+
+warning: redundant pattern matching, consider using `is_some()`
+  --> src/systems/command.rs:10:16
+   |
+10 |         if let Some(_) = world.creates.get(id).and_then(|c| c.as_ref()) {
+   |         -------^^^^^^^------------------------------------------------- help: try: `if world.creates.get(id).and_then(|c| c.as_ref()).is_some()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_pattern_matching
+   = note: `#[warn(clippy::redundant_pattern_matching)]` on by default
+
+warning: redundant pattern matching, consider using `is_some()`
+  --> src/systems/command.rs:30:16
+   |
+30 |         if let Some(_) = world.deletes.get(id).and_then(|d| d.as_ref()) {
+   |         -------^^^^^^^------------------------------------------------- help: try: `if world.deletes.get(id).and_then(|d| d.as_ref()).is_some()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_pattern_matching
+
+warning: you should consider adding a `Default` implementation for `World`
+  --> src/main.rs:50:5
+   |
+50 | /     pub fn new() -> Self {
+51 | |         Self {
+52 | |             texts: vec![],
+53 | |             statuses: vec![],
+...  |
+70 | |     }
+   | |_____^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+   = note: `#[warn(clippy::new_without_default)]` on by default
+help: try adding this
+   |
+49 + impl Default for World {
+50 +     fn default() -> Self {
+51 +         Self::new()
+52 +     }
+53 + }
+   |
+
+warning: you should consider adding a `Default` implementation for `Scheduler`
+   --> src/main.rs:136:5
+    |
+136 | /     pub fn new() -> Self {
+137 | |         Self { systems: Vec::new() }
+138 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+    |
+135 + impl Default for Scheduler {
+136 +     fn default() -> Self {
+137 +         Self::new()
+138 +     }
+139 + }
+    |
+
+warning: you should consider adding a `Default` implementation for `App`
+   --> src/main.rs:157:5
+    |
+157 | /     pub fn new() -> Self {
+158 | |         let mut app = Self {
+159 | |             world: World::new(),
+160 | |             scheduler: Scheduler::new(),
+...   |
+165 | |         app
+166 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+    |
+156 + impl Default for App {
+157 +     fn default() -> Self {
+158 +         Self::new()
+159 +     }
+160 + }
+    |
+
+warning: `platform` (bin "platform") generated 18 warnings (run `cargo clippy --fix --bin "platform"` to apply 13 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.61s
