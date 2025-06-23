@@ -28,12 +28,14 @@ pub struct Style {
 pub struct Container;
 
 /// Dòng/chữ dọc cho container
+#[derive(Clone, Copy)]
 pub enum Flow {
     Row,
     Column,
 }
 
 /// Căn chỉnh theo trục phụ
+#[derive(Clone, Copy)]
 pub enum Align {
     Start,
     Center,
@@ -41,8 +43,13 @@ pub enum Align {
 }
 
 /// Phân phối không gian theo trục chính
+#[derive(Clone, Copy)]
 pub enum Justify {
     Start,
+    Center,
     End,
     Between,
 }
+
+/// Component Button, chứa nhãn nút bấm
+pub struct Button(pub String);

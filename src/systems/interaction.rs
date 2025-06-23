@@ -222,6 +222,15 @@ impl Interact {
             LAST_PRESSED = mouse.pressed;
         }
     }
+    /// Xử lý click trên Button: nếu entity có Click và Button, tạo entity lệnh Create
+    fn handle_button_click(world: &mut World) {
+        for id in 0..world.entity_count {
+            if world.clicks[id].is_some() && world.buttons[id].is_some() {
+                let e = world.spawn();
+                world.creates[e] = Some(Create);
+            }
+        }
+    }
 }
 
 impl System for Interact {
@@ -236,6 +245,7 @@ impl System for Interact {
         Self::handle_delete(world, keyboard);
         Self::handle_due(world, keyboard);
         Self::handle_mouse_interaction(world, mouse);
+        Self::handle_button_click(world);
         Self::update_last_pressed(mouse);
     }
 }

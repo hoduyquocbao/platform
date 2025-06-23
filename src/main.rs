@@ -54,9 +54,12 @@ pub struct World {
     pub collapseds: Vec<Option<Collapsed>>,
     pub dues: Vec<Option<Due>>,
     pub schedulings: Vec<Option<Scheduling>>,
+    pub aligns: Vec<Option<Align>>,
     pub entity_count: usize,
-    pub container: Option<Container>,
-    pub flows: Option<Flow>,
+    pub container: Vec<Option<Container>>,
+    pub flows: Vec<Option<Flow>>,
+    pub justifys: Vec<Option<Justify>>,
+    pub buttons: Vec<Option<Button>>,
 }
 
 impl World {
@@ -83,9 +86,12 @@ impl World {
             collapseds: vec![],
             dues: vec![],
             schedulings: vec![],
+            aligns: vec![],
             entity_count: 0,
-            container: None,
-            flows: None,
+            container: vec![],
+            flows: vec![],
+            justifys: vec![],
+            buttons: vec![],
         }
     }
     pub fn spawn(&mut self) -> Entity {
@@ -112,6 +118,11 @@ impl World {
         self.collapseds.push(None);
         self.dues.push(None);
         self.schedulings.push(None);
+        self.aligns.push(None);
+        self.buttons.push(None);
+        self.container.push(None);
+        self.flows.push(None);
+        self.justifys.push(None);
         id
     }
     pub fn mark_for_delete(&mut self, id: usize) {
@@ -155,6 +166,11 @@ impl World {
         sweep_vec!(self.collapseds);
         sweep_vec!(self.dues);
         sweep_vec!(self.schedulings);
+        sweep_vec!(self.aligns);
+        sweep_vec!(self.buttons);
+        sweep_vec!(self.container);
+        sweep_vec!(self.flows);
+        sweep_vec!(self.justifys);
         self.entity_count = keep.len();
     }
 }
@@ -231,8 +247,8 @@ impl App {
         self.world.styles[root] = Some(Style { color: "#f0f0f0" });
         self.world.visibles[root] = Some(Visible);
         self.world.childrens[root] = Some(Children(vec![]));
-        self.world.container = Some(Container);
-        self.world.flows = Some(Flow::Column);
+        self.world.container[root] = Some(Container);
+        self.world.flows[root] = Some(Flow::Column);
         // Header
         let header = self.world.spawn();
         self.world.bounds[header] = Some(Bounds { x: 0.0, y: 0.0, width: 800.0, height: 60.0 });
@@ -247,8 +263,8 @@ impl App {
         self.world.styles[content] = Some(Style { color: "#ffffff" });
         self.world.visibles[content] = Some(Visible);
         self.world.childrens[content] = Some(Children(vec![]));
-        self.world.container = Some(Container);
-        self.world.flows = Some(Flow::Column);
+        self.world.container[content] = Some(Container);
+        self.world.flows[content] = Some(Flow::Column);
         self.world.parents[content] = Some(Parent(root));
         if let Some(children) = &mut self.world.childrens[root] { children.0.push(content); }
         // Footer
@@ -259,6 +275,17 @@ impl App {
         self.world.texts[footer] = Some(Text { value: "FOOTER".to_string() });
         self.world.parents[footer] = Some(Parent(root));
         if let Some(children) = &mut self.world.childrens[root] { children.0.push(footer); }
+        // Gán Justify::Center cho footer
+        self.world.justifys[footer] = Some(Justify::Center);
+        // Thêm Button "Create" vào footer
+        let button = self.world.spawn();
+        self.world.bounds[button] = Some(Bounds { x: 0.0, y: 0.0, width: 120.0, height: 40.0 });
+        self.world.styles[button] = Some(Style { color: "#ffb300" });
+        self.world.visibles[button] = Some(Visible);
+        self.world.texts[button] = Some(Text { value: "Create".to_string() });
+        self.world.buttons[button] = Some(Button("Create".to_string()));
+        self.world.parents[button] = Some(Parent(footer));
+        if let Some(children) = &mut self.world.childrens[footer] { children.0.push(button); }
         // Các task mẫu là con của content
         for i in 0..3 {
             let task = self.world.spawn();
