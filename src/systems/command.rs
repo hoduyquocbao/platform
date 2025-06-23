@@ -25,6 +25,22 @@ impl System for Create {
                     height: 30.0,
                 });
                 world.styles[e] = Some(crate::components::ui::Style { color: "gray" });
+                // Nếu có entity đang Selected, tạo quan hệ cha-con
+                let mut parent_id = None;
+                for sid in 0..world.entity_count {
+                    if world.selecteds[sid].is_some() {
+                        parent_id = Some(sid);
+                        break;
+                    }
+                }
+                if let Some(pid) = parent_id {
+                    world.parents[e] = Some(Parent(pid));
+                    if let Some(children) = &mut world.childrens[pid] {
+                        children.0.push(e);
+                    } else {
+                        world.childrens[pid] = Some(Children(vec![e]));
+                    }
+                }
                 world.creates[id] = None;
             }
         }

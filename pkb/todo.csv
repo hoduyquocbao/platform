@@ -68,4 +68,9 @@ T066,"(Cycle 2) Chạy phân tích tĩnh (clippy, fmt) và sửa tất cả cả
 T067,"(Cycle 2) Rà soát và tái cấu trúc các system của Cycle 2 (Interact, Command, Layout)",Coder,Done,Medium
 T068,"(Cycle 2) Đảm bảo tất cả code mới đều có bình luận rõ ràng",Coder,Done,Medium
 T069,"(Cycle 2) Xác minh codebase đạt trạng thái 'zero-warning'",Coder,Done,High
-T070,"(Cycle 2) Viết báo cáo triển khai V14 và cập nhật PKB",Coder,Done,High 
+T070,"(Cycle 2) Viết báo cáo triển khai V14 và cập nhật PKB",Coder,Done,High
+T071,"(Cycle 3) Định nghĩa các Component quan hệ (Parent, Children)",Coder,Done,High
+T072,"(Cycle 3) Nâng cấp System `Create` để hỗ trợ tạo công việc con",Coder,Done,High
+T073,"(Cycle 3) Nâng cấp System `Render` để hiển thị cấu trúc phân cấp",Coder,Done,Medium
+T074,"(Cycle 3) Nâng cấp System `Layout` để hỗ trợ thụt lề",Coder,Done,Medium
+T075,"(Cycle 3) Viết báo cáo triển khai V15 và cập nhật PKB",Coder,Done,High 

@@ -35,9 +35,11 @@ impl System for Render {
                 if world.editings[id].is_some() {
                     display_text.push('|');
                 }
+                let indent = (bounds.x / 8.0) as usize;
+                let indent_str = "  ".repeat(indent);
                 println!(
-                    "{} {} ({}, {}) {} {} {}",
-                    prefix, status, bounds.x, bounds.y, display_text, style, id
+                    "{}{} {} ({}, {}) {} {} {}",
+                    indent_str, prefix, status, bounds.x, bounds.y, display_text, style, id
                 );
             }
         }

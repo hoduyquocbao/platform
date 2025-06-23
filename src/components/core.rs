@@ -24,5 +24,10 @@ pub struct Dirty;
 
 pub struct Disabled;
 
-pub struct Create;
-pub struct Delete;
+pub struct Create; // trùng với Command::Create
+pub struct Delete; // trùng với Command::Delete
+
+/// Component lưu entity cha của một entity (nếu có).
+pub struct Parent(pub usize);
+/// Component lưu danh sách entity con của một entity.
+pub struct Children(pub Vec<usize>);

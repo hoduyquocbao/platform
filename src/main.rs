@@ -41,6 +41,8 @@ pub struct World {
     pub styles: Vec<Option<Style>>,
     pub creates: Vec<Option<Create>>,
     pub deletes: Vec<Option<Delete>>,
+    pub parents: Vec<Option<Parent>>,
+    pub childrens: Vec<Option<Children>>,
     pub to_delete: Vec<Option<()>>,
     pub entity_count: usize,
 }
@@ -63,6 +65,8 @@ impl World {
             styles: vec![],
             creates: vec![],
             deletes: vec![],
+            parents: vec![],
+            childrens: vec![],
             to_delete: vec![],
             entity_count: 0,
         }
@@ -85,6 +89,8 @@ impl World {
         self.styles.push(None);
         self.creates.push(None);
         self.deletes.push(None);
+        self.parents.push(None);
+        self.childrens.push(None);
         self.to_delete.push(None);
         id
     }
@@ -123,6 +129,8 @@ impl World {
         sweep_vec!(self.styles);
         sweep_vec!(self.creates);
         sweep_vec!(self.deletes);
+        sweep_vec!(self.parents);
+        sweep_vec!(self.childrens);
         sweep_vec!(self.to_delete);
         self.entity_count = keep.len();
     }
