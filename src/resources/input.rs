@@ -1,3 +1,5 @@
+use crate::components::core::Status;
+
 #[derive(Default)]
 pub struct Mouse {
     pub position: (f32, f32),
@@ -18,6 +20,13 @@ pub struct Time {
     pub now: u64,
 }
 
+#[derive(Default)]
+pub struct Filter {
+    pub text: Option<String>,
+    pub status: Option<Status>,
+    pub overdue: bool,
+}
+
 pub mod mod_rs {
     use super::*;
     #[derive(Default)]
@@ -25,5 +34,6 @@ pub mod mod_rs {
         pub mouse: Mouse,
         pub keyboard: Keyboard,
         pub time: Time,
+        pub filter: Filter,
     }
 }

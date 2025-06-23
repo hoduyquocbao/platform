@@ -106,6 +106,52 @@ impl Interact {
             }
         }
     }
+    /// Xử lý tìm kiếm/lọc: nhấn '/' vào chế độ search, nhập ký tự cập nhật Filter.text, 's' lọc Status, 'o' lọc overdue.
+    fn handle_filter(filter: &mut crate::resources::input::Filter, keyboard: &crate::resources::input::Keyboard) {
+        use std::cell::RefCell;
+        thread_local! {
+            static SEARCH_MODE: RefCell<bool> = const { RefCell::new(false) };
+        }
+        // Bật/tắt search mode
+        if keyboard.key == Some('/') {
+            SEARCH_MODE.with(|m| *m.borrow_mut() = true);
+            filter.text = Some(String::new());
+        }
+        // Nếu đang search mode, nhập ký tự vào filter.text
+        let mut in_search = false;
+        SEARCH_MODE.with(|m| in_search = *m.borrow());
+        if in_search {
+            if let Some(c) = keyboard.key {
+                if c.is_ascii_alphanumeric() || c == ' ' {
+                    if let Some(s) = &mut filter.text {
+                        s.push(c);
+                    }
+                }
+            }
+            if keyboard.backspace {
+                if let Some(s) = &mut filter.text {
+                    s.pop();
+                }
+            }
+            if keyboard.enter || keyboard.escape {
+                SEARCH_MODE.with(|m| *m.borrow_mut() = false);
+                if let Some(s) = &filter.text {
+                    if s.is_empty() { filter.text = None; }
+                }
+            }
+        }
+        // Phím nóng: 's' lọc Status, 'o' lọc overdue
+        if keyboard.key == Some('s') {
+            if filter.status.is_some() {
+                filter.status = None;
+            } else {
+                filter.status = Some(Status);
+            }
+        }
+        if keyboard.key == Some('o') {
+            filter.overdue = !filter.overdue;
+        }
+    }
     /// Xử lý phát hiện hover, click, chọn entity bằng chuột.
     fn handle_mouse_interaction(world: &mut World, mouse: &crate::resources::input::Mouse) {
         for id in 0..world.entity_count {
@@ -162,8 +208,9 @@ impl Interact {
 impl System for Interact {
     /// Hàm chính thực thi hệ thống tương tác mỗi frame.
     fn run(&mut self, world: &mut World, resources: &mut Resources) {
-        let mouse = &resources.mouse;
         let keyboard = &resources.keyboard;
+        Self::handle_filter(&mut resources.filter, keyboard);
+        let mouse = &resources.mouse;
         Self::reset_hover_click(world);
         Self::handle_editing(world, keyboard);
         Self::handle_create(world, keyboard);

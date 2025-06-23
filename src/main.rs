@@ -14,6 +14,7 @@ mod systems {
     pub mod render;
     pub mod text;
     pub mod toggle;
+    pub mod filter;
 }
 mod engine;
 use engine::System;
@@ -193,9 +194,10 @@ impl App {
     fn initialize(&mut self) {
         use systems::{
             command::{Create, Delete}, interaction::Interact, layout::Layout, persist::Persist,
-            render::Render, text::TextSystem, toggle::Toggle,
+            render::Render, text::TextSystem, toggle::Toggle, filter::FilterSystem,
         };
         self.scheduler.add(Box::new(Interact));
+        self.scheduler.add(Box::new(FilterSystem));
         self.scheduler.add(Box::new(Layout));
         self.scheduler.add(Box::new(Create));
         self.scheduler.add(Box::new(Delete));

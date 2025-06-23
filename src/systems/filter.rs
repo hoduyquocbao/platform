@@ -1,0 +1,43 @@
+use crate::World;
+use crate::engine::System;
+use crate::resources::input::mod_rs::Resources;
+use crate::components::core::Visible;
+
+pub struct FilterSystem;
+
+impl System for FilterSystem {
+    fn run(&mut self, world: &mut World, resources: &mut Resources) {
+        let filter = &resources.filter;
+        let now = resources.time.now;
+        // Xóa Visible khỏi tất cả entity
+        for id in 0..world.entity_count {
+            world.visibles[id] = None;
+        }
+        // Lọc entity
+        for id in 0..world.entity_count {
+            // Lọc theo text
+            if let Some(ref text) = filter.text {
+                let t = world.texts[id].as_ref().map(|t| t.value.as_str()).unwrap_or("");
+                if !t.contains(text) {
+                    continue;
+                }
+            }
+            // Lọc theo status
+            if filter.status.is_some() && world.statuses[id].is_none() {
+                continue;
+            }
+            // Lọc overdue
+            if filter.overdue {
+                if let Some(due) = world.dues[id].as_ref() {
+                    if due.0 >= now || world.statuses[id].is_none() {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+            }
+            // Nếu qua hết các filter, cho Visible
+            world.visibles[id] = Some(Visible);
+        }
+    }
+} 

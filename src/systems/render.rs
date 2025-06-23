@@ -58,5 +58,20 @@ impl System for Render {
                 );
             }
         }
+        let filter = &resources.filter;
+        let mut filter_str = String::from("FILTERING:");
+        if let Some(ref t) = filter.text {
+            filter_str.push_str(&format!(" text=\"{}\"", t));
+        }
+        if filter.status.is_some() {
+            filter_str.push_str(" status=TODO");
+        }
+        if filter.overdue {
+            filter_str.push_str(" overdue=true");
+        }
+        if filter_str == "FILTERING:" {
+            filter_str.push_str(" (none)");
+        }
+        println!("{}", filter_str);
     }
 }

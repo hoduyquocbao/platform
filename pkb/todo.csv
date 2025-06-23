@@ -92,4 +92,10 @@ T090,"(Cycle 3) Định nghĩa Component `Due` và Resource `Time`",Coder,Done,H
 T091,"(Cycle 3) Nâng cấp System `Interact` để hỗ trợ đặt ngày hết hạn",Coder,Done,High
 T092,"(Cycle 3) Nâng cấp System `Render` để hiển thị và cảnh báo ngày hết hạn",Coder,Done,Medium
 T093,"(Cycle 3) Viết kịch bản kiểm thử để xác minh logic quá hạn",Coder,Done,High
-T094,"(Cycle 3) Viết báo cáo triển khai V19 và cập nhật PKB",Coder,Done,High 
+T094,"(Cycle 3) Viết báo cáo triển khai V19 và cập nhật PKB",Coder,Done,High
+T095,"(Cycle 3) Định nghĩa Resource `Filter` để lưu trạng thái lọc",Coder,Done,High
+T096,"(Cycle 3) Nâng cấp System `Interact` để người dùng có thể sửa đổi `Filter`",Coder,Done,High
+T097,"(Cycle 3) Triển khai đầy đủ logic cho System `Filter` (Cull)",Coder,Done,Critical
+T098,"(Cycle 3) Nâng cấp System `Render` để hiển thị trạng thái lọc hiện tại",Coder,Done,Medium
+T099,"(Cycle 3) Viết kịch bản kiểm thử để xác minh logic lọc",Coder,Done,High
+T100,"(Cycle 3) Viết báo cáo triển khai V20 và cập nhật PKB",Coder,Done,High 
