@@ -13,11 +13,17 @@ pub struct Keyboard {
     pub e: bool,
 }
 
+#[derive(Default)]
+pub struct Time {
+    pub now: u64,
+}
+
 pub mod mod_rs {
     use super::*;
     #[derive(Default)]
     pub struct Resources {
         pub mouse: Mouse,
         pub keyboard: Keyboard,
+        pub time: Time,
     }
 }

@@ -48,6 +48,64 @@ impl Interact {
             }
         }
     }
+    /// Xử lý đặt/sửa ngày hết hạn (Due date) cho entity Selected.
+    fn handle_due(world: &mut World, keyboard: &crate::resources::input::Keyboard) {
+        // Bước 1: Nếu có entity Selected và nhấn 't', thêm Scheduling
+        for id in 0..world.entity_count {
+            if world.selecteds[id].is_some() && keyboard.key == Some('t') && world.schedulings[id].is_none() {
+                world.schedulings[id] = Some(Scheduling);
+            }
+        }
+        // Bước 2: Nếu entity đang Scheduling, nhập số để build timestamp, Enter để lưu
+        for id in 0..world.entity_count {
+            if world.schedulings[id].is_some() {
+                // Sử dụng tạm trường editings để lưu chuỗi số nhập vào (hoặc có thể mở rộng thêm trường riêng)
+                // Đơn giản: mỗi lần nhập số, append vào Due tạm (dùng Option<u64> hoặc String)
+                // Ở đây ta dùng một mảng tạm static để lưu input cho demo
+                use std::cell::RefCell;
+                thread_local! {
+                    static DUE_INPUT: RefCell<[Option<String>; 128]> = RefCell::new([(); 128].map(|_| None));
+                }
+                // Nhận số
+                if let Some(c) = keyboard.key {
+                    if c.is_ascii_digit() {
+                        DUE_INPUT.with(|arr| {
+                            let mut arr = arr.borrow_mut();
+                            let s = arr[id].get_or_insert(String::new());
+                            s.push(c);
+                        });
+                    }
+                }
+                // Backspace
+                if keyboard.backspace {
+                    DUE_INPUT.with(|arr| {
+                        let mut arr = arr.borrow_mut();
+                        if let Some(s) = &mut arr[id] {
+                            s.pop();
+                        }
+                    });
+                }
+                // Enter: lưu Due
+                if keyboard.enter {
+                    DUE_INPUT.with(|arr| {
+                        let mut arr = arr.borrow_mut();
+                        if let Some(s) = arr[id].take() {
+                            if let Ok(ts) = s.parse::<u64>() {
+                                world.dues[id] = Some(Due(ts));
+                                world.dirties[id] = Some(Dirty);
+                            }
+                        }
+                    });
+                    world.schedulings[id] = None;
+                }
+                // Escape: hủy
+                if keyboard.escape {
+                    DUE_INPUT.with(|arr| arr.borrow_mut()[id] = None);
+                    world.schedulings[id] = None;
+                }
+            }
+        }
+    }
     /// Xử lý phát hiện hover, click, chọn entity bằng chuột.
     fn handle_mouse_interaction(world: &mut World, mouse: &crate::resources::input::Mouse) {
         for id in 0..world.entity_count {
@@ -110,6 +168,7 @@ impl System for Interact {
         Self::handle_editing(world, keyboard);
         Self::handle_create(world, keyboard);
         Self::handle_delete(world, keyboard);
+        Self::handle_due(world, keyboard);
         Self::handle_mouse_interaction(world, mouse);
         Self::update_last_pressed(mouse);
     }

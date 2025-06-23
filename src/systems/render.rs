@@ -6,7 +6,8 @@ use crate::components::traits::Renderable;
 pub struct Render;
 
 impl System for Render {
-    fn run(&mut self, world: &mut World, _resources: &mut Resources) {
+    fn run(&mut self, world: &mut World, resources: &mut Resources) {
+        let now = resources.time.now;
         println!("--- FRAME START ---");
         for id in 0..world.entity_count {
             if world.visibles[id].is_some()
@@ -21,7 +22,7 @@ impl System for Render {
                 } else {
                     "[DONE]"
                 };
-                let style = world.styles[id].as_ref().map(|s| s.color).unwrap_or("");
+                let mut style = world.styles[id].as_ref().map(|s| s.color).unwrap_or("");
                 let mut prefix = " ";
                 if world.editings[id].is_some() {
                     prefix = "[EDITING]";
@@ -42,11 +43,18 @@ impl System for Render {
                 if world.editings[id].is_some() {
                     display_text.push('|');
                 }
+                let mut due_str = String::new();
+                if let Some(due) = world.dues[id].as_ref() {
+                    due_str = format!(" [Due: {}]", due.0);
+                    if due.0 < now && world.statuses[id].is_some() {
+                        style = "red";
+                    }
+                }
                 let indent = (bounds.x / 8.0) as usize;
                 let indent_str = "  ".repeat(indent);
                 println!(
-                    "{}{}{} {} ({}, {}) {} {} {}",
-                    indent_str, icon, prefix, status, bounds.x, bounds.y, display_text, style, id
+                    "{}{}{} {} ({}, {}) {}{} {} {}",
+                    indent_str, icon, prefix, status, bounds.x, bounds.y, display_text, due_str, style, id
                 );
             }
         }

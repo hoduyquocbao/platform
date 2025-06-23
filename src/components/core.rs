@@ -80,3 +80,6 @@ pub struct Delete; // trùng với Command::Delete
 pub struct Parent(pub usize);
 /// Component lưu danh sách entity con của một entity.
 pub struct Children(pub Vec<usize>);
+
+pub struct Due(pub u64);
+pub struct Scheduling;

@@ -46,6 +46,8 @@ pub struct World {
     pub childrens: Vec<Option<Children>>,
     pub to_delete: Vec<Option<()>>,
     pub collapseds: Vec<Option<Collapsed>>,
+    pub dues: Vec<Option<Due>>,
+    pub schedulings: Vec<Option<Scheduling>>,
     pub entity_count: usize,
 }
 
@@ -71,6 +73,8 @@ impl World {
             childrens: vec![],
             to_delete: vec![],
             collapseds: vec![],
+            dues: vec![],
+            schedulings: vec![],
             entity_count: 0,
         }
     }
@@ -96,6 +100,8 @@ impl World {
         self.childrens.push(None);
         self.to_delete.push(None);
         self.collapseds.push(None);
+        self.dues.push(None);
+        self.schedulings.push(None);
         id
     }
     pub fn mark_for_delete(&mut self, id: usize) {
@@ -137,6 +143,8 @@ impl World {
         sweep_vec!(self.childrens);
         sweep_vec!(self.to_delete);
         sweep_vec!(self.collapseds);
+        sweep_vec!(self.dues);
+        sweep_vec!(self.schedulings);
         self.entity_count = keep.len();
     }
 }
@@ -244,6 +252,7 @@ impl App {
     }
 
     pub fn run(&mut self) {
+        self.resources.time.now += 1;
         self.scheduler.run(&mut self.world, &mut self.resources);
     }
 }
