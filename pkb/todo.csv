@@ -29,4 +29,9 @@ T027,"Nâng cấp System `Layout` để sắp xếp Entity theo chiều dọc",C
 T028,"Triển khai cơ chế vào/ra 'Chế độ Chỉnh sửa' (Editing Mode)",Coder,Done,High
 T029,"Tạo System `Text` để xử lý đầu vào văn bản khi đang chỉnh sửa",Coder,Done,High
 T030,"Nâng cấp System `Render` để hiển thị bố cục và trạng thái chỉnh sửa",Coder,Done,Medium
-T031,"Viết báo cáo triển khai V6 và cập nhật PKB",Coder,Done,High 
+T031,"Viết báo cáo triển khai V6 và cập nhật PKB",Coder,Done,High
+T032,"Triển khai cơ chế tạo Task mới dựa trên Command",Coder,Done,High
+T033,"Triển khai cơ chế xóa Task đang chọn dựa trên Command",Coder,Done,High
+T034,"Tái cấu trúc và tập trung hóa logic xử lý đầu vào bàn phím",Coder,Done,Medium
+T035,"Đảm bảo System `Layout` được cập nhật sau khi tạo/xóa Task",Coder,Done,Medium
+T036,"Viết báo cáo triển khai V7 và cập nhật PKB",Coder,Done,High 

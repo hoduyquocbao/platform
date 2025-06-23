@@ -2,6 +2,7 @@ use crate::components::core::*;
 use crate::World;
 
 // Giả lập phím nhấn: e để vào Editing, Enter để lưu, Escape để hủy
+#[derive(PartialEq)]
 pub enum Key {
     E,
     Enter,

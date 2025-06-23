@@ -22,4 +22,7 @@ pub struct Click;
 
 pub struct Dirty;
 
-pub struct Disabled; 
+pub struct Disabled;
+
+pub struct Create;
+pub struct Delete; 

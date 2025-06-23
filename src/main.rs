@@ -13,6 +13,7 @@ mod systems {
     pub mod persist;
     pub mod edit;
     pub mod text;
+    pub mod command;
 }
 
 use components::core::*;
@@ -22,6 +23,7 @@ use systems::*;
 use components::ui::Hover as UiHover;
 
 use systems::edit::{Keyboard, Key};
+use systems::command;
 
 type Entity = usize;
 
@@ -39,6 +41,9 @@ pub struct World {
     pub disableds: Vec<Option<Disabled>>,
     pub bounds: Vec<Option<Bounds>>,
     pub styles: Vec<Option<Style>>,
+    pub creates: Vec<Option<Create>>,
+    pub deletes: Vec<Option<Delete>>,
+    pub to_delete: Vec<Option<()>>,
     pub entity_count: usize,
 }
 
@@ -58,6 +63,9 @@ impl World {
             disableds: vec![],
             bounds: vec![],
             styles: vec![],
+            creates: vec![],
+            deletes: vec![],
+            to_delete: vec![],
             entity_count: 0,
         }
     }
@@ -77,7 +85,47 @@ impl World {
         self.disableds.push(None);
         self.bounds.push(None);
         self.styles.push(None);
+        self.creates.push(None);
+        self.deletes.push(None);
+        self.to_delete.push(None);
         id
+    }
+    pub fn mark_for_delete(&mut self, id: usize) {
+        self.to_delete[id] = Some(());
+    }
+    pub fn sweep(&mut self) {
+        let mut keep = vec![];
+        for id in 0..self.entity_count {
+            if self.to_delete[id].is_none() {
+                keep.push(id);
+            }
+        }
+        macro_rules! sweep_vec {
+            ($vec:expr) => {
+                let mut new_vec = vec![];
+                for &id in &keep {
+                    new_vec.push($vec[id].take());
+                }
+                $vec = new_vec;
+            };
+        }
+        sweep_vec!(self.texts);
+        sweep_vec!(self.statuses);
+        sweep_vec!(self.priorities);
+        sweep_vec!(self.selecteds);
+        sweep_vec!(self.editings);
+        sweep_vec!(self.visibles);
+        sweep_vec!(self.hovers);
+        sweep_vec!(self.actives);
+        sweep_vec!(self.clicks);
+        sweep_vec!(self.dirties);
+        sweep_vec!(self.disableds);
+        sweep_vec!(self.bounds);
+        sweep_vec!(self.styles);
+        sweep_vec!(self.creates);
+        sweep_vec!(self.deletes);
+        sweep_vec!(self.to_delete);
+        self.entity_count = keep.len();
     }
 }
 
@@ -121,6 +169,7 @@ impl App {
     fn initialize(&mut self) {
         self.scheduler.add(interaction::interact);
         self.scheduler.add(layout::layout);
+        self.scheduler.add(command::process);
         self.scheduler.add(render::render);
         self.scheduler.add(persist::persist);
         self.scheduler.add(toggle::toggle);
@@ -152,25 +201,26 @@ impl App {
     }
 
     pub fn run(&mut self) {
-        // Giả lập cập nhật mouse mỗi frame
-        self.mouse.position.0 += 10.0;
-        self.mouse.position.1 += 5.0;
-        self.mouse.pressed = !self.mouse.pressed;
-        // Giả lập keyboard input: frame 1 nhấn 'e', frame 2 nhập 'A', frame 3 nhấn Enter
+        // Giả lập input tập trung: frame 1 nhấn 'n', frame 2 nhấn 'd', frame 3 không nhấn gì
         static mut FRAME: usize = 0;
         unsafe {
             FRAME += 1;
-            self.keyboard.key = match FRAME {
-                1 => Some(Key::E),
-                2 => Some(Key::Char('A')),
-                3 => Some(Key::Enter),
-                _ => None,
-            };
+            match FRAME {
+                1 => {
+                    let e = self.world.spawn();
+                    self.world.creates[e] = Some(Create);
+                },
+                2 => {
+                    for id in 0..self.world.entity_count {
+                        if self.world.selecteds[id].is_some() {
+                            self.world.deletes[id] = Some(Delete);
+                        }
+                    }
+                },
+                _ => {}
+            }
         }
         self.scheduler.run(&mut self.world, &self.mouse);
-        // Truyền keyboard cho edit và text system
-        edit::edit(&mut self.world, &self.keyboard);
-        text::text(&mut self.world, &self.keyboard);
     }
 }
 
