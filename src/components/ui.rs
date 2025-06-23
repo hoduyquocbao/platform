@@ -6,6 +6,7 @@ pub struct Bounds {
 }
 
 pub struct Hover;
+pub use Hover as UiHover;
 
 pub struct Style {
     pub color: &'static str,

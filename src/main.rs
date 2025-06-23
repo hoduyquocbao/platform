@@ -17,6 +17,7 @@ use components::core::*;
 use components::ui::*;
 use resources::input::*;
 use systems::*;
+use components::ui::Hover as UiHover;
 
 type Entity = usize;
 
@@ -27,7 +28,7 @@ pub struct World {
     pub selecteds: Vec<Option<Selected>>,
     pub editings: Vec<Option<Editing>>,
     pub visibles: Vec<Option<Visible>>,
-    pub hovers: Vec<Option<Hover>>,
+    pub hovers: Vec<Option<UiHover>>,
     pub actives: Vec<Option<Active>>,
     pub clicks: Vec<Option<Click>>,
     pub dirties: Vec<Option<Dirty>>,
@@ -117,6 +118,7 @@ impl App {
         self.scheduler.add(layout::layout);
         self.scheduler.add(render::render);
         self.scheduler.add(persist::persist);
+        self.scheduler.add(toggle::toggle);
         // Khởi tạo entity mẫu với Bounds và Style
         let e0 = self.world.spawn();
         self.world.texts[e0] = Some(Text { value: "Task 1".to_string() });
