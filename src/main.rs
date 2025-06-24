@@ -6,22 +6,19 @@ mod task;
 mod ui;
 mod user;
 
-use engine::{World, Scheduler};
-use resources::{Resources, Session};
+use engine::{World, Scheduler, Plugin};
+use resources::{Resources};
 use resources::font::{FontResource, FONT_DATA};
 use platform::InputCallbackArc;
-use task::{CreateSystem, DeleteSystem, ToggleSystem, TextSystem, PersistSystem};
-use ui::{LayoutSystem, RenderSystem, InteractSystem, FilterSystem};
-use user::{User, Owner};
 use minifb::{Key, Window, WindowOptions};
 use std::sync::{Arc, Mutex};
 
 /// Ứng dụng chính, chứa World, Scheduler và Resources.
 #[derive(Default)]
 pub struct App {
-    world: World,
-    scheduler: Scheduler,
-    resources: Resources,
+    pub world: World,
+    pub scheduler: Scheduler,
+    pub resources: Resources,
 }
 
 impl App {
@@ -34,74 +31,22 @@ impl App {
         // Load font từ dữ liệu nhúng
         let font = fontdue::Font::from_bytes(FONT_DATA, fontdue::FontSettings::default()).map_err(|_| error::Error::FontLoad)?;
         app.resources.font = Some(FontResource(font));
-        app.initialize();
         Ok(app)
     }
 
-    fn initialize(&mut self) {
-        self.scheduler.add(Box::new(InteractSystem));
-        self.scheduler.add(Box::new(FilterSystem));
-        self.scheduler.add(Box::new(LayoutSystem));
-        self.scheduler.add(Box::new(CreateSystem));
-        self.scheduler.add(Box::new(DeleteSystem));
-        self.scheduler.add(Box::new(RenderSystem));
-        self.scheduler.add(Box::new(PersistSystem));
-        self.scheduler.add(Box::new(ToggleSystem));
-        self.scheduler.add(Box::new(TextSystem));
-        
-        // Tạo các user mẫu
-        let user_a = self.world.spawn();
-        self.world.users[user_a] = Some(User { name: "User A".to_string() });
-        
-        let user_b = self.world.spawn();
-        self.world.users[user_b] = Some(User { name: "User B".to_string() });
-        
-        // Khởi tạo session với User A làm người dùng hiện tại
-        self.resources.session = Some(Session { user: user_a });
-        
-        // Tái cấu trúc layout chính thành Master-Detail
-        let root = self.world.spawn();
-        self.world.bounds[root] = Some(ui::components::Bounds { x: 0.0, y: 0.0, width: 800.0, height: 600.0 });
-        self.world.styles[root] = Some(ui::components::Style { color: "#f0f0f0".to_string() });
-        self.world.visibles[root] = Some(ui::components::Visible);
-        self.world.childrens[root] = Some(task::components::Children(vec![]));
-        self.world.container[root] = Some(ui::components::Container);
-        self.world.flows[root] = Some(ui::components::Flow::Row);
-        // Master panel (danh sách task)
-        let master_panel = self.world.spawn();
-        self.world.bounds[master_panel] = Some(ui::components::Bounds { x: 0.0, y: 0.0, width: 400.0, height: 600.0 });
-        self.world.styles[master_panel] = Some(ui::components::Style { color: "#ffffff".to_string() });
-        self.world.visibles[master_panel] = Some(ui::components::Visible);
-        self.world.childrens[master_panel] = Some(task::components::Children(vec![]));
-        self.world.container[master_panel] = Some(ui::components::Container);
-        self.world.flows[master_panel] = Some(ui::components::Flow::Column);
-        self.world.parents[master_panel] = Some(task::components::Parent(root));
-        if let Some(children) = &mut self.world.childrens[root] { children.0.push(master_panel); }
-        // Detail panel (hiện thông tin chi tiết)
-        let detail_panel = self.world.spawn();
-        self.world.bounds[detail_panel] = Some(ui::components::Bounds { x: 400.0, y: 0.0, width: 400.0, height: 600.0 });
-        self.world.styles[detail_panel] = Some(ui::components::Style { color: "#e3e3e3".to_string() });
-        self.world.visibles[detail_panel] = Some(ui::components::Visible);
-        self.world.childrens[detail_panel] = Some(task::components::Children(vec![]));
-        self.world.container[detail_panel] = Some(ui::components::Container);
-        self.world.flows[detail_panel] = Some(ui::components::Flow::Column);
-        self.world.parents[detail_panel] = Some(task::components::Parent(root));
-        if let Some(children) = &mut self.world.childrens[root] { children.0.push(detail_panel); }
-        // Thêm các task mẫu vào master_panel với owner
-        for i in 0..3 {
-            let task = self.world.spawn();
-            self.world.bounds[task] = Some(ui::components::Bounds { x: 0.0, y: 0.0, width: 380.0, height: 40.0 });
-            self.world.styles[task] = Some(ui::components::Style { color: "#e3f2fd".to_string() });
-            self.world.visibles[task] = Some(ui::components::Visible);
-            self.world.texts[task] = Some(task::components::Text { value: format!("Task {}", i + 1) });
-            self.world.parents[task] = Some(task::components::Parent(master_panel));
-            // Gán owner cho task (luân phiên giữa User A và User B)
-            let owner = if i % 2 == 0 { user_a } else { user_b };
-            self.world.owners[task] = Some(Owner(owner));
-            if let Some(children) = &mut self.world.childrens[master_panel] { children.0.push(task); }
-        }
+    // Phương thức để thêm một plugin
+    pub fn add<P: Plugin>(&mut self, plugin: P) -> &mut Self {
+        plugin.build(self);
+        self
     }
 
+    // Phương thức để thêm một system trực tiếp
+    pub fn system<S: engine::System + 'static>(&mut self, system: S) -> &mut Self {
+        self.scheduler.add(Box::new(system));
+        self
+    }
+
+    // Phương thức để chạy ứng dụng
     pub fn run_with_framebuffer(&mut self, framebuffer: &mut [u32], width: usize, height: usize) {
         self.resources.time.now += 1;
         self.resources.framebuffer = Some((framebuffer.as_mut_ptr(), width, height));
@@ -135,6 +80,12 @@ fn main() {
             std::process::exit(1);
         }
     };
+    
+    // Lắp ráp ứng dụng từ các plugin
+    app.add(user::UserPlugin)
+       .add(task::Task)
+       .add(ui::Ui);
+    
     // Tạo input handler và đăng ký callback
     let input_shared = Arc::new(Mutex::new(resources::input::Input::new()));
     let input_for_callback = Arc::clone(&input_shared);

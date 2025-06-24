@@ -64,12 +64,6 @@ pub enum Justify {
 pub struct Button;
 
 // Traits
-/// Trait cho các component có thể render.
-pub trait Renderable {
-    type Object;
-    fn object(&self) -> &Self::Object;
-}
-
 /// Trait cho các component có thể tương tác.
 pub trait Interactable {
     type Target;
@@ -77,13 +71,6 @@ pub trait Interactable {
 }
 
 // Implement traits for UI components
-impl Renderable for Visible {
-    type Object = Self;
-    fn object(&self) -> &Self::Object {
-        self
-    }
-}
-
 impl Interactable for Selected {
     type Target = Self;
     fn target(&self) -> &Self::Target {

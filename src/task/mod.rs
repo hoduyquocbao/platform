@@ -1,5 +1,5 @@
 pub mod components;
 pub mod systems;
+pub mod plugin;
 
-pub use components::{Text, Status, Priority, Due, Parent, Children, Dirty, Create, Delete, Collapsed, Scheduling};
-pub use systems::{CreateSystem, DeleteSystem, ToggleSystem, TextSystem, PersistSystem}; 
+pub use plugin::Task; 

@@ -1,4 +1,3 @@
-use crate::user::components::User;
 use crate::resources::font::FontResource;
 
 #[derive(Default)]

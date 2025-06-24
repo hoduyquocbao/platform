@@ -1,13 +1,13 @@
 use crate::task::components::Status;
 use crate::resources::font::FontResource;
 
-#[derive(Default)]
+#[allow(dead_code)]
 pub struct Mouse {
     pub position: (f32, f32),
     pub pressed: bool,
 }
 
-#[derive(Default)]
+#[allow(dead_code)]
 pub struct Keyboard {
     pub key: Option<char>, // phím ký tự vừa được nhấn
     pub chars: String, // chuỗi ký tự nhập vào frame này
@@ -17,12 +17,12 @@ pub struct Keyboard {
     pub e: bool,
 }
 
-#[derive(Default)]
+#[allow(dead_code)]
 pub struct Time {
     pub now: u64,
 }
 
-#[derive(Default)]
+#[allow(dead_code)]
 pub struct Filter {
     pub text: Option<String>,
     pub status: Option<Status>,
@@ -72,7 +72,7 @@ impl minifb::InputCallback for Input {
 
 pub mod mod_rs {
     use super::*;
-    #[derive(Default)]
+    #[allow(dead_code)]
     pub struct Resources {
         pub mouse: Mouse,
         pub keyboard: Keyboard,
@@ -85,6 +85,7 @@ pub mod mod_rs {
 }
 
 /// Resource quản lý phiên làm việc của người dùng hiện tại.
+#[allow(dead_code)]
 pub struct Session {
     pub user: usize, // Entity ID của người dùng hiện tại
 }

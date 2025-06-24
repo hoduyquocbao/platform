@@ -155,4 +155,10 @@ T153,"(Arch) Thiết kế và tạo cấu trúc thư mục module mới",Coder,D
 T154,"(Arch) Di chuyển và phân tách code vào các module (engine, ui, task, user)",Coder,Done,Critical
 T155,"(Arch) Định nghĩa public API (hợp đồng) cho mỗi module",Coder,Done,High
 T156,"(Arch) Cập nhật tất cả các `use` statement và main.rs để phù hợp với cấu trúc mới",Coder,Done,High
-T157,"(Arch) Viết báo cáo triển khai V32 và cập nhật PKB",Coder,Done,High 
+T157,"(Arch) Viết báo cáo triển khai V32 và cập nhật PKB",Coder,Done,High
+T158,"(Arch-Refactor) Định nghĩa `trait Plugin` trong module `engine`",Coder,Done,Critical
+T159,"(Arch-Refactor) Tái cấu trúc `App` thành một `App Builder` hỗ trợ plugin",Coder,Done,Critical
+T160,"(Arch-Refactor) Triển khai `TaskPlugin`, `UserPlugin`, `UiPlugin`",Coder,Done,Critical
+T161,"(Arch-Refactor) \"Lắp ráp\" ứng dụng trong `main` từ các plugin",Coder,Done,Critical
+T162,"(Arch-Refactor) Dọn dẹp và xác minh codebase đạt 'zero-warning'",Coder,Done,Critical
+T163,"(Arch-Refactor) Viết báo cáo triển khai V33 và cập nhật PKB",Coder,Done,High 

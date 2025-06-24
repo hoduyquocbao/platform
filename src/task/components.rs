@@ -1,4 +1,4 @@
-use crate::ui::components::{Renderable, Interactable};
+use crate::ui::components::Interactable;
 
 // Core & State Components
 /// Component lưu trữ văn bản cho một entity (ví dụ: tên task).
@@ -6,30 +6,11 @@ pub struct Text {
     pub value: String,
 }
 
-impl Renderable for Text {
-    type Object = Self;
-    fn object(&self) -> &Self::Object {
-        self
-    }
-}
-
 /// Component đánh dấu trạng thái TODO/DONE cho entity.
 pub struct Status;
-impl Renderable for Status {
-    type Object = Self;
-    fn object(&self) -> &Self::Object {
-        self
-    }
-}
 
 /// Component đánh dấu mức độ ưu tiên cho entity.
 pub struct Priority;
-impl Renderable for Priority {
-    type Object = Self;
-    fn object(&self) -> &Self::Object {
-        self
-    }
-}
 
 /// Component lưu entity cha của một entity (nếu có).
 pub struct Parent(pub usize);

@@ -1,5 +1,10 @@
 use crate::resources::Resources;
 
+/// Trait cho các Plugin trong hệ thống.
+pub trait Plugin {
+    fn build(&self, app: &mut crate::App);
+}
+
 /// Trait cho tất cả các System trong ECS.
 pub trait System {
     fn run(&mut self, world: &mut World, resources: &mut Resources);
