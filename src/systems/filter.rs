@@ -41,6 +41,16 @@ impl System for FilterSystem {
                     continue;
                 }
             }
+            // Lọc theo owner
+            if let Some(owner_id) = filter.owner {
+                if let Some(owner) = world.owners[id].as_ref() {
+                    if owner.0 != owner_id {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+            }
             // Nếu qua hết các filter, cho Visible
             world.visibles[id] = Some(Visible);
         }

@@ -145,4 +145,9 @@ T143,"(Cycle 4) Viết báo cáo triển khai V29 và cập nhật PKB",Coder,Op
 T144,"(Cycle 4) Chuẩn bị file font và tích hợp macro `include_bytes!`",Coder,Done,Critical
 T145,"(Cycle 4) Tái cấu trúc logic khởi tạo FontResource từ dữ liệu nhúng",Coder,Done,Critical
 T146,"(Cycle 4) Xác minh ứng dụng khởi động thành công mà không cần file assets/",Coder,Done,High
-T147,"(Cycle 4) Viết báo cáo triển khai V30 và cập nhật PKB",Coder,Done,High 
+T147,"(Cycle 4) Viết báo cáo triển khai V30 và cập nhật PKB",Coder,Done,High
+T148,"(Cycle 5) Định nghĩa Component `User` và `Owner`",Coder,Done,Critical
+T149,"(Cycle 5) Định nghĩa Resource `Session` để quản lý người dùng hiện tại",Coder,Done,High
+T150,"(Cycle 5) Nâng cấp System `Create` để tự động gán Owner",Coder,Done,High
+T151,"(Cycle 5) Nâng cấp System `Render` và `Filter` để nhận biết Owner",Coder,Done,Medium
+T152,"(Cycle 5) Viết báo cáo triển khai V31 và cập nhật PKB",Coder,Done,High 

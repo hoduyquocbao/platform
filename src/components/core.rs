@@ -121,3 +121,11 @@ pub struct Children(pub Vec<usize>);
 pub struct Due(pub u64);
 /// Component đánh dấu entity đang ở chế độ nhập ngày hết hạn.
 pub struct Scheduling;
+
+/// Component lưu thông tin người dùng.
+pub struct User {
+    pub name: String,
+}
+
+/// Component thể hiện quyền sở hữu, trỏ đến Entity của người dùng.
+pub struct Owner(pub usize);

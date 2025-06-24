@@ -164,6 +164,14 @@ impl Interact {
         if keyboard.key == Some('o') {
             filter.overdue = !filter.overdue;
         }
+        // Phím nóng: 'u' lọc theo owner (chỉ hiển thị task của người dùng hiện tại)
+        if keyboard.key == Some('u') {
+            if filter.owner.is_some() {
+                filter.owner = None;
+            } else {
+                // Sẽ được set trong run() method khi có session
+            }
+        }
     }
     /// Xử lý phát hiện hover, click, chọn entity bằng chuột (bao gồm toggle collapsed).
     fn handle_mouse_interaction(world: &mut World, mouse: &crate::resources::input::Mouse) {
@@ -238,6 +246,14 @@ impl System for Interact {
     fn run(&mut self, world: &mut World, resources: &mut Resources) {
         let keyboard = &resources.keyboard;
         Self::handle_filter(&mut resources.filter, keyboard);
+        
+        // Xử lý phím 'u' để set owner filter từ session
+        if keyboard.key == Some('u') && resources.filter.owner.is_none() {
+            if let Some(session) = &resources.session {
+                resources.filter.owner = Some(session.user);
+            }
+        }
+        
         let mouse = &resources.mouse;
         Self::reset_hover_click(world);
         Self::handle_editing(world, keyboard);

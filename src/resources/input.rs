@@ -27,6 +27,7 @@ pub struct Filter {
     pub text: Option<String>,
     pub status: Option<Status>,
     pub overdue: bool,
+    pub owner: Option<usize>, // Entity ID của owner để lọc
 }
 
 pub struct Input {
@@ -71,5 +72,11 @@ pub mod mod_rs {
         pub filter: Filter,
         pub framebuffer: Option<(*mut u32, usize, usize)>,
         pub font: Option<FontResource>,
+        pub session: Option<Session>,
     }
+}
+
+/// Resource quản lý phiên làm việc của người dùng hiện tại.
+pub struct Session {
+    pub user: usize, // Entity ID của người dùng hiện tại
 }

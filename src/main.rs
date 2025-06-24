@@ -23,7 +23,7 @@ use engine::System;
 use components::core::*;
 use components::ui::*;
 use resources::input::mod_rs::Resources;
-use resources::input::Input;
+use resources::input::{Input, Session};
 use resources::font::{FontResource, FONT_DATA};
 use minifb::{Key, Window, WindowOptions};
 use std::sync::{Arc, Mutex};
@@ -60,6 +60,8 @@ pub struct World {
     pub flows: Vec<Option<Flow>>,
     pub justifys: Vec<Option<Justify>>,
     pub buttons: Vec<Option<Button>>,
+    pub users: Vec<Option<User>>,
+    pub owners: Vec<Option<Owner>>,
 }
 
 impl World {
@@ -92,6 +94,8 @@ impl World {
             flows: vec![],
             justifys: vec![],
             buttons: vec![],
+            users: vec![],
+            owners: vec![],
         }
     }
     pub fn spawn(&mut self) -> Entity {
@@ -123,6 +127,8 @@ impl World {
         self.container.push(None);
         self.flows.push(None);
         self.justifys.push(None);
+        self.users.push(None);
+        self.owners.push(None);
         id
     }
     pub fn mark_for_delete(&mut self, id: usize) {
@@ -171,6 +177,8 @@ impl World {
         sweep_vec!(self.container);
         sweep_vec!(self.flows);
         sweep_vec!(self.justifys);
+        sweep_vec!(self.users);
+        sweep_vec!(self.owners);
         self.entity_count = keep.len();
     }
 }
@@ -239,6 +247,17 @@ impl App {
         self.scheduler.add(Box::new(Persist));
         self.scheduler.add(Box::new(Toggle));
         self.scheduler.add(Box::new(TextSystem));
+        
+        // Tạo các user mẫu
+        let user_a = self.world.spawn();
+        self.world.users[user_a] = Some(User { name: "User A".to_string() });
+        
+        let user_b = self.world.spawn();
+        self.world.users[user_b] = Some(User { name: "User B".to_string() });
+        
+        // Khởi tạo session với User A làm người dùng hiện tại
+        self.resources.session = Some(Session { user: user_a });
+        
         // Tái cấu trúc layout chính thành Master-Detail
         let root = self.world.spawn();
         self.world.bounds[root] = Some(Bounds { x: 0.0, y: 0.0, width: 800.0, height: 600.0 });
@@ -267,7 +286,7 @@ impl App {
         self.world.flows[detail_panel] = Some(Flow::Column);
         self.world.parents[detail_panel] = Some(Parent(root));
         if let Some(children) = &mut self.world.childrens[root] { children.0.push(detail_panel); }
-        // Thêm các task mẫu vào master_panel
+        // Thêm các task mẫu vào master_panel với owner
         for i in 0..3 {
             let task = self.world.spawn();
             self.world.bounds[task] = Some(Bounds { x: 0.0, y: 0.0, width: 380.0, height: 40.0 });
@@ -275,6 +294,9 @@ impl App {
             self.world.visibles[task] = Some(Visible);
             self.world.texts[task] = Some(Text { value: format!("Task {}", i + 1) });
             self.world.parents[task] = Some(Parent(master_panel));
+            // Gán owner cho task (luân phiên giữa User A và User B)
+            let owner = if i % 2 == 0 { user_a } else { user_b };
+            self.world.owners[task] = Some(Owner(owner));
             if let Some(children) = &mut self.world.childrens[master_panel] { children.0.push(task); }
         }
     }

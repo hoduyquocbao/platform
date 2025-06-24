@@ -9,7 +9,7 @@ pub struct Create;
 
 impl System for Create {
     /// Thực thi tạo task mới cho mỗi entity có component Create, tự động gán parent nếu có entity đang Selected.
-    fn run(&mut self, world: &mut World, _resources: &mut Resources) {
+    fn run(&mut self, world: &mut World, resources: &mut Resources) {
         for id in 0..world.entity_count {
             if world.creates[id].is_some() {
                 let e = world.spawn();
@@ -26,6 +26,12 @@ impl System for Create {
                     height: 30.0,
                 });
                 world.styles[e] = Some(crate::components::ui::Style { color: "gray" });
+                
+                // Tự động gán Owner từ session hiện tại
+                if let Some(session) = &resources.session {
+                    world.owners[e] = Some(Owner(session.user));
+                }
+                
                 // Nếu có entity đang Selected, tạo quan hệ cha-con
                 let mut parent_id = None;
                 for sid in 0..world.entity_count {

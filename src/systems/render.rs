@@ -100,6 +100,8 @@ impl System for Render {
                     let mut cursor_x = x0 + 8;
                     let baseline = y0 + h / 2;
                     let font_size = (h as f32 * 0.5).max(12.0);
+                    
+                    // Vẽ tên task
                     for ch in text.value.chars() {
                         let (metrics, bitmap) = font.rasterize(ch, font_size);
                         let glyph_y = baseline.saturating_sub(metrics.height / 2);
@@ -115,6 +117,29 @@ impl System for Render {
                             text_color,
                         );
                         cursor_x += metrics.advance_width as usize;
+                    }
+                    
+                    // Vẽ tên người sở hữu nếu có
+                    if let Some(owner) = world.owners[id].as_ref() {
+                        if let Some(user) = world.users[owner.0].as_ref() {
+                            let owner_text = format!(" - ({})", user.name);
+                            for ch in owner_text.chars() {
+                                let (metrics, bitmap) = font.rasterize(ch, font_size);
+                                let glyph_y = baseline.saturating_sub(metrics.height / 2);
+                                blit_glyph(
+                                    framebuffer,
+                                    width,
+                                    height,
+                                    cursor_x,
+                                    glyph_y,
+                                    &bitmap,
+                                    metrics.width,
+                                    metrics.height,
+                                    0xFFCCCCCC, // Màu xám nhạt cho tên owner
+                                );
+                                cursor_x += metrics.advance_width as usize;
+                            }
+                        }
                     }
                 }
             }
@@ -171,6 +196,23 @@ impl System for Render {
                             framebuffer, width, height, cursor_x, glyph_y, &bitmap, metrics.width, metrics.height, text_color,
                         );
                         cursor_x += metrics.advance_width as usize;
+                    }
+                }
+                
+                // Vẽ thông tin Owner
+                if let Some(owner) = world.owners[sel].as_ref() {
+                    if let Some(user) = world.users[owner.0].as_ref() {
+                        let label = format!("Owner: {}", user.name);
+                        let mut cursor_x = x0;
+                        let baseline = cursor_y + (font_size as usize);
+                        for ch in label.chars() {
+                            let (metrics, bitmap) = font.rasterize(ch, font_size);
+                            let glyph_y = baseline.saturating_sub(metrics.height / 2);
+                            blit_glyph(
+                                framebuffer, width, height, cursor_x, glyph_y, &bitmap, metrics.width, metrics.height, text_color,
+                            );
+                            cursor_x += metrics.advance_width as usize;
+                        }
                     }
                 }
             }
