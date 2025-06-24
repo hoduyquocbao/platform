@@ -1,0 +1,3 @@
+ID,Context,Module,Type,Name,Responsibility,Dependency
+A001,Core,components,Struct,Text,"Chứa nội dung văn bản của một Entity",
+A002,Core,systems,System,Persist,"Lưu các Entity có Component 'Dirty' vào bộ nhớ dài hạn",Dirty 

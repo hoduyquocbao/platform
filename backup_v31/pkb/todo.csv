@@ -53,12 +53,12 @@ T051,"(Cycle 2) Triển khai cơ chế vào/ra 'Chế độ Chỉnh sửa' (Edit
 T052,"(Cycle 2) Tạo System `Text` để xử lý đầu vào văn bản khi đang chỉnh sửa",Coder,Done,High
 T053,"(Cycle 2) Nâng cấp System `Render` để hiển thị bố cục và trạng thái chỉnh sửa",Coder,Done,Medium
 T054,"(Cycle 2) Viết báo cáo triển khai V11 và cập nhật PKB",Coder,Done,High
-T055,"(Refactor) Định nghĩa System Trait và Resource Container",Coder,Done,Critical
-T056,"(Refactor) Chuyển đổi tất cả các system hiện tại thành các struct rỗng",Coder,Done,Critical
-T057,"(Refactor) Triển khai System Trait cho tất cả các struct system",Coder,Done,Critical
-T058,"(Refactor) Nâng cấp Scheduler để thực thi các Box<dyn System>",Coder,Done,Critical
-T059,"(Refactor) Cập nhật main.rs và xác minh build thành công",Coder,Done,Critical
-T060,"(Refactor) Viết báo cáo triển khai V12 và cập nhật PKB",Coder,Done,High
+T055,"(Refactor) Định nghĩa System Trait và Resource Container",Coder,Open,Critical
+T056,"(Refactor) Chuyển đổi tất cả các system hiện tại thành các struct rỗng",Coder,Open,Critical
+T057,"(Refactor) Triển khai System Trait cho tất cả các struct system",Coder,Open,Critical
+T058,"(Refactor) Nâng cấp Scheduler để thực thi các Box<dyn System>",Coder,Open,Critical
+T059,"(Refactor) Cập nhật main.rs và xác minh build thành công",Coder,Open,Critical
+T060,"(Refactor) Viết báo cáo triển khai V12 và cập nhật PKB",Coder,Open,High
 T061,"(Cycle 2) Triển khai cơ chế tạo Task mới dựa trên Command",Coder,Done,High
 T062,"(Cycle 2) Triển khai cơ chế xóa Task đang chọn dựa trên Command",Coder,Done,High
 T063,"(Cycle 2) Nâng cấp System `Interact` để xử lý đầu vào bàn phím",Coder,Done,Medium
@@ -99,49 +99,49 @@ T097,"(Cycle 3) Triển khai đầy đủ logic cho System `Filter` (Cull)",Code
 T098,"(Cycle 3) Nâng cấp System `Render` để hiển thị trạng thái lọc hiện tại",Coder,Done,Medium
 T099,"(Cycle 3) Viết kịch bản kiểm thử để xác minh logic lọc",Coder,Done,High
 T100,"(Cycle 3) Viết báo cáo triển khai V20 và cập nhật PKB",Coder,Done,High
-T101,"(Cycle 3) Chạy phân tích tĩnh (clippy, fmt) và sửa tất cả cảnh báo",Coder,Done,High
-T102,"(Cycle 3) Rà soát và tái cấu trúc các system của Cycle 3 (đặc biệt là Interact)",Coder,Done,Critical
-T103,"(Cycle 3) Đảm bảo tất cả code mới của Cycle 3 đều có bình luận rõ ràng",Coder,Done,Medium
-T104,"(Cycle 3) Xác minh codebase đạt trạng thái 'zero-warning'",Coder,Done,High
-T105,"(Cycle 3) Viết báo cáo triển khai V21 và cập nhật PKB",Coder,Done,High
-T106,"(Cycle 4) Lựa chọn và tích hợp thư viện đồ họa 2D tối giản",Coder,Done,Critical
-T107,"(Cycle 4) Cập nhật vòng lặp chính để quản lý cửa sổ đồ họa",Coder,Done,Critical
-T108,"(Cycle 4) Nâng cấp System `Interact` để nhận sự kiện từ cửa sổ",Coder,Done,High
-T109,"(Cycle 4) Tái cấu trúc System `Render` để vẽ hình khối cơ bản",Coder,Done,High
-T110,"(Cycle 4) Viết báo cáo triển khai V22 và cập nhật PKB",Coder,Done,High
-T111,"(Cycle 4) Sửa lỗi lifetime E0107 trong struct App",Coder,Done,Critical
-T112,"(Cycle 4) Sửa lỗi range pattern E0029 trong logic input",Coder,Done,Critical
-T113,"(Cycle 4) Dọn dẹp tất cả các cảnh báo (warnings)",Coder,Done,High
-T114,"(Cycle 4) Xác minh build thành công và không còn cảnh báo",Coder,Done,Critical
-T115,"(Cycle 4) Viết báo cáo triển khai V23 và cập nhật PKB",Coder,Done,High
-T116,"(Cycle 4) Định nghĩa và triển khai InputCallback cho minifb",Coder,Done,Critical
-T117,"(Cycle 4) Tích hợp callback vào vòng lặp chính để cập nhật Keyboard Resource",Coder,Done,Critical
-T118,"(Cycle 4) Xác minh chức năng chỉnh sửa văn bản hoạt động trở lại",Coder,Done,High
-T119,"(Cycle 4) Viết báo cáo triển khai V24 và cập nhật PKB",Coder,Done,High
-T120,"(Cycle 4) Lựa chọn và tích hợp thư viện xử lý font",Coder,Done,Critical
-T121,"(Cycle 4) Tạo Resource để quản lý dữ liệu font",Coder,Done,High
-T122,"(Cycle 4) Nâng cấp System `Render` để vẽ văn bản lên framebuffer",Coder,Done,Critical
-T123,"(Cycle 4) Viết kịch bản kiểm thử để xác minh văn bản hiển thị và cập nhật đúng",Coder,Done,High
-T124,"(Cycle 4) Viết báo cáo triển khai V25 và cập nhật PKB",Coder,Done,High
-T125,"(Cycle 4) Định nghĩa enum Error tùy chỉnh cho ứng dụng",Coder,Done,Critical
-T126,"(Cycle 4) Tái cấu trúc logic tải font để trả về Result, loại bỏ panic",Coder,Done,Critical
-T127,"(Cycle 4) Xử lý Result trong hàm main để thoát an toàn hoặc phục hồi mềm",Coder,Done,Critical
-T128,"(Cycle 4) Xác minh ứng dụng không còn panic khi file font bị lỗi/thiếu",Coder,Done,High
-T129,"(Cycle 4) Viết báo cáo triển khai V26 và cập nhật PKB",Coder,Done,High
-T130,"(Cycle 4) Hiện thực hóa các Component Bố cục (Container, Flow, etc.)",Coder,Done,High
-T131,"(Cycle 4) Tái cấu trúc System `Layout` để hỗ trợ container lồng nhau",Coder,Done,Critical
-T132,"(Cycle 4) Xây dựng cấu trúc UI mẫu (Header, Content, Footer)",Coder,Done,High
-T133,"(Cycle 4) Xác minh hệ thống layout hoạt động đúng",Coder,Done,High
-T134,"(Cycle 4) Viết báo cáo triển khai V27 và cập nhật PKB",Coder,Done,High
-T135,"(Cycle 4) Hoàn thiện System `Layout` với logic Align và Justify",Coder,Done,Critical
-T136,"(Cycle 4) Định nghĩa Component `Button`",Coder,Done,High
-T137,"(Cycle 4) Thêm Entity Button vào Footer và layout nó",Coder,Done,High
-T138,"(Cycle 4) Nâng cấp System `Interact` để xử lý Click trên Button",Coder,Done,High
-T139,"(Cycle 4) Viết báo cáo triển khai V28 và cập nhật PKB",Coder,Done,High
-T140,"(Cycle 4) Sửa tất cả các cảnh báo từ cargo clippy",Coder,Done,Critical
-T141,"(Cycle 4) Tái cấu trúc layout chính thành Master-Detail",Coder,Done,High
-T142,"(Cycle 4) Nâng cấp System `Render` để hiển thị thông tin chi tiết",Coder,Done,High
-T143,"(Cycle 4) Viết báo cáo triển khai V29 và cập nhật PKB",Coder,Done,High
+T101,"(Cycle 3) Chạy phân tích tĩnh (clippy, fmt) và sửa tất cả cảnh báo",Coder,Open,High
+T102,"(Cycle 3) Rà soát và tái cấu trúc các system của Cycle 3 (đặc biệt là Interact)",Coder,Open,Critical
+T103,"(Cycle 3) Đảm bảo tất cả code mới của Cycle 3 đều có bình luận rõ ràng",Coder,Open,Medium
+T104,"(Cycle 3) Xác minh codebase đạt trạng thái 'zero-warning'",Coder,Open,High
+T105,"(Cycle 3) Viết báo cáo triển khai V21 và cập nhật PKB",Coder,Open,High
+T106,"(Cycle 4) Lựa chọn và tích hợp thư viện đồ họa 2D tối giản",Coder,Open,Critical
+T107,"(Cycle 4) Cập nhật vòng lặp chính để quản lý cửa sổ đồ họa",Coder,Open,Critical
+T108,"(Cycle 4) Nâng cấp System `Interact` để nhận sự kiện từ cửa sổ",Coder,Open,High
+T109,"(Cycle 4) Tái cấu trúc System `Render` để vẽ hình khối cơ bản",Coder,Open,High
+T110,"(Cycle 4) Viết báo cáo triển khai V22 và cập nhật PKB",Coder,Open,High
+T111,"(Cycle 4) Sửa lỗi lifetime E0107 trong struct App",Coder,Open,Critical
+T112,"(Cycle 4) Sửa lỗi range pattern E0029 trong logic input",Coder,Open,Critical
+T113,"(Cycle 4) Dọn dẹp tất cả các cảnh báo (warnings)",Coder,Open,High
+T114,"(Cycle 4) Xác minh build thành công và không còn cảnh báo",Coder,Open,Critical
+T115,"(Cycle 4) Viết báo cáo triển khai V23 và cập nhật PKB",Coder,Open,High
+T116,"(Cycle 4) Định nghĩa và triển khai InputCallback cho minifb",Coder,Open,Critical
+T117,"(Cycle 4) Tích hợp callback vào vòng lặp chính để cập nhật Keyboard Resource",Coder,Open,Critical
+T118,"(Cycle 4) Xác minh chức năng chỉnh sửa văn bản hoạt động trở lại",Coder,Open,High
+T119,"(Cycle 4) Viết báo cáo triển khai V24 và cập nhật PKB",Coder,Open,High
+T120,"(Cycle 4) Lựa chọn và tích hợp thư viện xử lý font",Coder,Open,Critical
+T121,"(Cycle 4) Tạo Resource để quản lý dữ liệu font",Coder,Open,High
+T122,"(Cycle 4) Nâng cấp System `Render` để vẽ văn bản lên framebuffer",Coder,Open,Critical
+T123,"(Cycle 4) Viết kịch bản kiểm thử để xác minh văn bản hiển thị và cập nhật đúng",Coder,Open,High
+T124,"(Cycle 4) Viết báo cáo triển khai V25 và cập nhật PKB",Coder,Open,High
+T125,"(Cycle 4) Định nghĩa enum Error tùy chỉnh cho ứng dụng",Coder,Open,Critical
+T126,"(Cycle 4) Tái cấu trúc logic tải font để trả về Result, loại bỏ panic",Coder,Open,Critical
+T127,"(Cycle 4) Xử lý Result trong hàm main để thoát an toàn hoặc phục hồi mềm",Coder,Open,Critical
+T128,"(Cycle 4) Xác minh ứng dụng không còn panic khi file font bị lỗi/thiếu",Coder,Open,High
+T129,"(Cycle 4) Viết báo cáo triển khai V26 và cập nhật PKB",Coder,Open,High
+T130,"(Cycle 4) Hiện thực hóa các Component Bố cục (Container, Flow, etc.)",Coder,Open,High
+T131,"(Cycle 4) Tái cấu trúc System `Layout` để hỗ trợ container lồng nhau",Coder,Open,Critical
+T132,"(Cycle 4) Xây dựng cấu trúc UI mẫu (Header, Content, Footer)",Coder,Open,High
+T133,"(Cycle 4) Xác minh hệ thống layout hoạt động đúng",Coder,Open,High
+T134,"(Cycle 4) Viết báo cáo triển khai V27 và cập nhật PKB",Coder,Open,High
+T135,"(Cycle 4) Hoàn thiện System `Layout` với logic Align và Justify",Coder,Open,Critical
+T136,"(Cycle 4) Định nghĩa Component `Button`",Coder,Open,High
+T137,"(Cycle 4) Thêm Entity Button vào Footer và layout nó",Coder,Open,High
+T138,"(Cycle 4) Nâng cấp System `Interact` để xử lý Click trên Button",Coder,Open,High
+T139,"(Cycle 4) Viết báo cáo triển khai V28 và cập nhật PKB",Coder,Open,High
+T140,"(Cycle 4) Sửa tất cả các cảnh báo từ cargo clippy",Coder,Open,Critical
+T141,"(Cycle 4) Tái cấu trúc layout chính thành Master-Detail",Coder,Open,High
+T142,"(Cycle 4) Nâng cấp System `Render` để hiển thị thông tin chi tiết",Coder,Open,High
+T143,"(Cycle 4) Viết báo cáo triển khai V29 và cập nhật PKB",Coder,Open,High
 T144,"(Cycle 4) Chuẩn bị file font và tích hợp macro `include_bytes!`",Coder,Done,Critical
 T145,"(Cycle 4) Tái cấu trúc logic khởi tạo FontResource từ dữ liệu nhúng",Coder,Done,Critical
 T146,"(Cycle 4) Xác minh ứng dụng khởi động thành công mà không cần file assets/",Coder,Done,High
@@ -150,9 +150,4 @@ T148,"(Cycle 5) Định nghĩa Component `User` và `Owner`",Coder,Done,Critical
 T149,"(Cycle 5) Định nghĩa Resource `Session` để quản lý người dùng hiện tại",Coder,Done,High
 T150,"(Cycle 5) Nâng cấp System `Create` để tự động gán Owner",Coder,Done,High
 T151,"(Cycle 5) Nâng cấp System `Render` và `Filter` để nhận biết Owner",Coder,Done,Medium
-T152,"(Cycle 5) Viết báo cáo triển khai V31 và cập nhật PKB",Coder,Done,High
-T153,"(Arch) Thiết kế và tạo cấu trúc thư mục module mới",Coder,Done,Critical
-T154,"(Arch) Di chuyển và phân tách code vào các module (engine, ui, task, user)",Coder,Done,Critical
-T155,"(Arch) Định nghĩa public API (hợp đồng) cho mỗi module",Coder,Done,High
-T156,"(Arch) Cập nhật tất cả các `use` statement và main.rs để phù hợp với cấu trúc mới",Coder,Done,High
-T157,"(Arch) Viết báo cáo triển khai V32 và cập nhật PKB",Coder,Done,High 
+T152,"(Cycle 5) Viết báo cáo triển khai V31 và cập nhật PKB",Coder,Done,High 

@@ -1,0 +1,2 @@
+ID,Timestamp,Type,Subject,Decision,Rationale
+M001,2025-06-23T14:00:00Z,Architectural,Initial Setup,"Khởi tạo dự án với cấu trúc thư mục và PKB theo quy chuẩn của Guardian","Thiết lập nền tảng vững chắc cho việc quản lý tri thức và cấu trúc dự án ngay từ đầu." 

@@ -1,4 +1,4 @@
-use crate::task::components::Status;
+use crate::components::core::Status;
 use crate::resources::font::FontResource;
 
 #[derive(Default)]
@@ -30,9 +30,8 @@ pub struct Filter {
     pub owner: Option<usize>, // Entity ID của owner để lọc
 }
 
-/// Input handler cho minifb, lưu trữ các ký tự được nhập vào.
 pub struct Input {
-    chars: Vec<char>,
+    pub chars: Vec<char>,
 }
 
 unsafe impl Send for Input {}
@@ -40,25 +39,12 @@ unsafe impl Sync for Input {}
 
 impl Input {
     pub fn new() -> Self {
-        Self { chars: vec![] }
+        Self { chars: Vec::new() }
     }
-    
-    pub fn add_char(&mut self, uni_char: u32) {
-        if let Some(ch) = char::from_u32(uni_char) {
-            self.chars.push(ch);
-        }
-    }
-    
     pub fn take_chars(&mut self) -> Vec<char> {
         let chars = self.chars.clone();
         self.chars.clear();
         chars
-    }
-}
-
-impl Default for Input {
-    fn default() -> Self {
-        Self::new()
     }
 }
 
@@ -67,6 +53,12 @@ impl minifb::InputCallback for Input {
         if let Some(character) = std::char::from_u32(uni_char) {
             self.chars.push(character);
         }
+    }
+}
+
+impl Default for Input {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

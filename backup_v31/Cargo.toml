@@ -1,0 +1,8 @@
+[package]
+name = "platform"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+minifb = "0.25"
+fontdue = "0.7"
