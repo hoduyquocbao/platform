@@ -141,4 +141,8 @@ T139,"(Cycle 4) Viết báo cáo triển khai V28 và cập nhật PKB",Coder,Op
 T140,"(Cycle 4) Sửa tất cả các cảnh báo từ cargo clippy",Coder,Open,Critical
 T141,"(Cycle 4) Tái cấu trúc layout chính thành Master-Detail",Coder,Open,High
 T142,"(Cycle 4) Nâng cấp System `Render` để hiển thị thông tin chi tiết",Coder,Open,High
-T143,"(Cycle 4) Viết báo cáo triển khai V29 và cập nhật PKB",Coder,Open,High 
+T143,"(Cycle 4) Viết báo cáo triển khai V29 và cập nhật PKB",Coder,Open,High
+T144,"(Cycle 4) Chuẩn bị file font và tích hợp macro `include_bytes!`",Coder,Done,Critical
+T145,"(Cycle 4) Tái cấu trúc logic khởi tạo FontResource từ dữ liệu nhúng",Coder,Done,Critical
+T146,"(Cycle 4) Xác minh ứng dụng khởi động thành công mà không cần file assets/",Coder,Done,High
+T147,"(Cycle 4) Viết báo cáo triển khai V30 và cập nhật PKB",Coder,Done,High 

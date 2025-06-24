@@ -24,7 +24,7 @@ use components::core::*;
 use components::ui::*;
 use resources::input::mod_rs::Resources;
 use resources::input::Input;
-use resources::font::FontResource;
+use resources::font::{FontResource, FONT_DATA};
 use minifb::{Key, Window, WindowOptions};
 use std::sync::{Arc, Mutex};
 
@@ -212,9 +212,8 @@ impl App {
             scheduler: Scheduler::new(),
             resources: Resources::default(),
         };
-        // Load font
-        let font_bytes = std::fs::read("assets/Roboto-Regular.ttf").map_err(|_| Error::FontLoad)?;
-        let font = fontdue::Font::from_bytes(font_bytes, fontdue::FontSettings::default()).map_err(|_| Error::FontLoad)?;
+        // Load font từ dữ liệu nhúng
+        let font = fontdue::Font::from_bytes(FONT_DATA, fontdue::FontSettings::default()).map_err(|_| Error::FontLoad)?;
         app.resources.font = Some(FontResource(font));
         app.initialize();
         Ok(app)
